@@ -1,15 +1,17 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { NotFoundComponent } from './shared/error/not-found/not-found.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { ProgressComponent } from './pages/progress/progress.component';
-import { NavbarComponent } from './shared/navbar/navbar.component';
-import { SidebarComponent } from './shared/sidebar/sidebar.component';
-import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {LoginComponent} from './login/login.component';
+import {NotFoundComponent} from './shared/error/not-found/not-found.component';
+import {DashboardComponent} from './pages/dashboard/dashboard.component';
+import {ProgressComponent} from './pages/progress/progress.component';
+import {NavbarComponent} from './shared/navbar/navbar.component';
+import {SidebarComponent} from './shared/sidebar/sidebar.component';
+import {BreadcrumbComponent} from './shared/breadcrumb/breadcrumb.component';
+import {HomeComponent} from './pages/home.component';
+import {RegisterComponent} from "./login/register.component";
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
     ProgressComponent,
     NavbarComponent,
     SidebarComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    HomeComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,4 +33,5 @@ import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
