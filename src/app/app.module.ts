@@ -4,31 +4,19 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
-import {NotFoundComponent} from './shared/error/not-found/not-found.component';
-import {DashboardComponent} from './pages/dashboard/dashboard.component';
-import {ProgressComponent} from './pages/progress/progress.component';
-import {NavbarComponent} from './shared/navbar/navbar.component';
-import {SidebarComponent} from './shared/sidebar/sidebar.component';
-import {BreadcrumbComponent} from './shared/breadcrumb/breadcrumb.component';
-import {HomeComponent} from './pages/home.component';
 import {RegisterComponent} from "./login/register.component";
+import {LayoutModule} from "./pages/layout.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    NotFoundComponent,
-    DashboardComponent,
-    ProgressComponent,
-    NavbarComponent,
-    SidebarComponent,
-    BreadcrumbComponent,
-    HomeComponent,
     RegisterComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    LayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
