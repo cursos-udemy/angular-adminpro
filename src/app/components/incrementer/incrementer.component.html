@@ -1,0 +1,11 @@
+<h4>{{title}}</h4>
+<div class="input-group">
+  <input #incrementerInput type="number" name="value" [(ngModel)]="value" (ngModelChange)="handleChangeValue($event)"
+         class="form-control" aria-label="Recipient's username with two button addons" aria-describedby="button-addon4"
+         [min]="0" [max]="100">
+  <div class="input-group-append" id="button-addon4">
+    <button class="btn btn-primary" type="button" (click)="increase()" [disabled]="!enabledIncrease()">
+      <i class="mdi mdi-plus"></i></button>
+    <button class="btn btn-primary" type="button" (click)="decrease()" [disabled]="!enabledDecrease()">
+      <i class="mdi mdi-minus"></i></button>
+  </div>
