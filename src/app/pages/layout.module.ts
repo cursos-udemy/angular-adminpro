@@ -8,19 +8,25 @@ import {ProgressComponent} from "./progress/progress.component";
 import {LayoutComponent} from "./layout.component";
 import {SharedModule} from "../shared/shared.module";
 import {IncrementerComponent} from "../components/incrementer/incrementer.component";
+import {DonutsChartComponent} from '../components/charts/donut-chart/donuts-chart.component';
+import {ChartsModule} from 'ng2-charts';
+import { ChartComponent } from './charts/chart/chart.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     ProgressComponent,
     LayoutComponent,
-    IncrementerComponent
+    IncrementerComponent,
+    DonutsChartComponent,
+    ChartComponent
   ],
   imports: [
     CommonModule,
     LayoutRoutingModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    ChartsModule
   ],
   exports: [
     DashboardComponent,

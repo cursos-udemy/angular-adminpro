@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {Routes, RouterModule} from '@angular/router';
 import {LayoutComponent} from "./layout.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {ProgressComponent} from "./progress/progress.component";
+import {ChartComponent} from "./charts/chart/chart.component";
 
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
     children: [
       {path: 'dashboard', component: DashboardComponent},
       {path: 'progress', component: ProgressComponent},
+      {path: 'chart', component: ChartComponent},
       {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
     ]
   },
@@ -21,4 +23,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class LayoutRoutingModule { }
+export class LayoutRoutingModule {
+}
