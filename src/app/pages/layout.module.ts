@@ -11,6 +11,7 @@ import {IncrementerComponent} from "../components/incrementer/incrementer.compon
 import {DonutsChartComponent} from '../components/charts/donut-chart/donuts-chart.component';
 import {ChartsModule} from 'ng2-charts';
 import { ChartComponent } from './charts/chart/chart.component';
+import { AccountSettingComponent } from './account-setting/account-setting.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ChartComponent } from './charts/chart/chart.component';
     LayoutComponent,
     IncrementerComponent,
     DonutsChartComponent,
-    ChartComponent
+    ChartComponent,
+    AccountSettingComponent
   ],
   imports: [
     CommonModule,
