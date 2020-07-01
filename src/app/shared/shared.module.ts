@@ -1,10 +1,17 @@
 import {NgModule} from '@angular/core';
+import {CommonModule} from "@angular/common";
+import {RouterModule} from "@angular/router";
+
 import {BreadcrumbComponent} from "./breadcrumb/breadcrumb.component";
 import {NotFoundComponent} from "./error/not-found/not-found.component";
 import {NavbarComponent} from "./navbar/navbar.component";
 import {SidebarComponent} from "./sidebar/sidebar.component";
 
 @NgModule({
+  imports: [
+    CommonModule,
+    RouterModule
+  ],
   declarations: [
     BreadcrumbComponent,
     NotFoundComponent,
