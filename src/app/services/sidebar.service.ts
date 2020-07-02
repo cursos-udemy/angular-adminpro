@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,14 @@ export class SidebarService {
         {title: 'Dashboard', url: '/dashboard'},
         {title: 'Progress', url: '/progress'},
         {title: 'Chart', url: '/chart'},
+        {title: 'Promises', url: '/promises'},
+        {title: 'Rxjs', url: '/rxjs'},
       ]
     }
   ];
 
-  constructor() { }
+  constructor() {
+  }
 }
 
 export interface MenuItem {

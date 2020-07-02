@@ -10,8 +10,10 @@ import {SharedModule} from "../shared/shared.module";
 import {IncrementerComponent} from "../components/incrementer/incrementer.component";
 import {DonutsChartComponent} from '../components/charts/donut-chart/donuts-chart.component';
 import {ChartsModule} from 'ng2-charts';
-import { ChartComponent } from './charts/chart/chart.component';
-import { AccountSettingComponent } from './account-setting/account-setting.component';
+import {ChartComponent} from './charts/chart/chart.component';
+import {AccountSettingComponent} from './account-setting/account-setting.component';
+import {PromisesComponent} from './promises/promises.component';
+import {RxjsComponent} from './rxjs/rxjs.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { AccountSettingComponent } from './account-setting/account-setting.compo
     IncrementerComponent,
     DonutsChartComponent,
     ChartComponent,
-    AccountSettingComponent
+    AccountSettingComponent,
+    PromisesComponent,
+    RxjsComponent
   ],
   imports: [
     CommonModule,
