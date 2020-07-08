@@ -1,6 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+
+import Swal from 'sweetalert2'
+
 import {UserSignUpModel} from "../models/user.model";
+import {UserService} from "../services/user.service";
+import {Router} from "@angular/router";
 
 declare function initPlugins();
 
@@ -13,7 +18,10 @@ export class RegisterComponent implements OnInit {
 
   public signupForm: FormGroup;
 
-  constructor() {
+  constructor(
+    private userService: UserService,
+    private router: Router
+  ) {
   }
 
   ngOnInit(): void {
@@ -52,13 +60,21 @@ export class RegisterComponent implements OnInit {
 
   public handleSubmit(): void {
     if (this.signupForm.invalid) return;
-
     const userSignUp = this.signupForm.getRawValue() as UserSignUpModel;
-    console.log(userSignUp);
 
     if (!userSignUp.acceptTerms) {
-      console.log('you must accept the terms and conditions to register');
+      Swal.fire('Important!', 'You must accept the terms and conditions to register!', 'warning');
       return;
     }
+    this.userService.signUp(userSignUp)
+      .subscribe(
+        user => {
+          console.log(user);
+          Swal.fire(`Congratulations ${userSignUp.name}!`, 'Your account has been created correctly, you can now sign in the application!', 'success');
+          this.router.navigateByUrl("/login");
+        },
+        err => {
+          console.log(err)
+        });
   }
 }

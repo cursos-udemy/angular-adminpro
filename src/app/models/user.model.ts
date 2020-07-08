@@ -6,6 +6,12 @@ export interface UserModel {
   role: string,
 }
 
+export interface UserSignInModel {
+  email: string,
+  password: string,
+  rememberMe: boolean
+}
+
 export interface UserSignUpModel {
   email: string,
   name: string
