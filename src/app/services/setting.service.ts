@@ -22,7 +22,6 @@ export class SettingService {
   }
 
   public readSetting() {
-    console.log('readSetting');
     const item = localStorage.getItem(APP_SETTING);
     if (item) this.config = JSON.parse(item);
     this.applyTheme(this.config.theme);

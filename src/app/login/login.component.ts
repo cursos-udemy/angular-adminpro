@@ -7,6 +7,8 @@ import {ToastrService} from "ngx-toastr";
 
 declare function initPlugins();
 
+declare const gapi: any;
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -16,6 +18,7 @@ export class LoginComponent implements OnInit {
 
   public email: string;
   public rememberMe: boolean = false;
+  private auth2: any;
 
   constructor(
     private userService: UserService,
@@ -26,11 +29,32 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     initPlugins();
+
+    this.googleInit();
     const emailRemembered = localStorage.getItem('APP-REMEMBER-ME');
     if (emailRemembered) {
       this.rememberMe = true;
-      this.email =emailRemembered;
+      this.email = emailRemembered;
     }
+  }
+
+  protected googleInit() {
+    gapi.load('auth2', () => {
+      this.auth2 = gapi.auth2.init({
+        client_id: '220412093307-obj46sqtus2450vgconvm460ieticfgo.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
+        scope: 'profile email'
+      });
+      this.attachSignin();
+    });
+  }
+
+  protected attachSignin() {
+    let element = document.getElementById('button-google');
+    this.auth2.attachClickHandler(element, {}, (googleUser) => {
+      const token = googleUser.getAuthResponse().id_token;
+      console.log('token', token);
+    });
   }
 
   public handleSubmit(form: NgForm): void {
