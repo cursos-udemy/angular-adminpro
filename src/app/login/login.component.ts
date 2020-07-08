@@ -65,6 +65,7 @@ export class LoginComponent implements OnInit {
   }
 
   public handleSubmit(form: NgForm): void {
+
     if (form.invalid) return;
 
     const userSignIn = form.value as UserSignInModel;
@@ -84,14 +85,9 @@ export class LoginComponent implements OnInit {
   }
 
   private handlerLoginSuccess(userAuthenticated) {
-    console.log('userAuthenticated', userAuthenticated)
-    localStorage.setItem('APP-USER-ID', userAuthenticated.userId);
-    //localStorage.setItem('APP-USER-NAME', loginSuccess.name);
-    localStorage.setItem('APP-TOKEN', userAuthenticated.accessToken);
     this.toastr.success(`Welcome ${userAuthenticated.name}`, 'Login success!', {
       closeButton: true, progressAnimation: "decreasing", progressBar: true, timeOut: 10000
     });
     this.router.navigateByUrl("/dashboard");
-
   }
 }
