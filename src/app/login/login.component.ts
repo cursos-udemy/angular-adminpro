@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit {
 
   private handlerLoginSuccess(userAuthenticated) {
     this.toastr.success(`Welcome ${userAuthenticated.name}`, 'Login success!', {
-      closeButton: true, progressAnimation: "decreasing", progressBar: true, timeOut: 10000
+      closeButton: true, progressAnimation: "decreasing", progressBar: true, timeOut: 5000
     });
     this.router.navigateByUrl("/dashboard");
   }

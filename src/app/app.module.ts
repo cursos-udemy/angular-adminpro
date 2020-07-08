@@ -18,14 +18,13 @@ import {ToastrModule} from "ngx-toastr";
     RegisterComponent,
   ],
   imports: [
-    //BrowserModule,
-    BrowserAnimationsModule, // required animations module
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     LayoutModule,
     HttpClientModule,
-    ToastrModule.forRoot() // ToastrModule added
+    ToastrModule.forRoot()
   ],
   providers: [Title],
   bootstrap: [AppComponent]
