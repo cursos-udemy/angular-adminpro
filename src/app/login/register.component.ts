@@ -69,7 +69,6 @@ export class RegisterComponent implements OnInit {
     this.userService.signUp(userSignUp)
       .subscribe(
         user => {
-          console.log(user);
           Swal.fire(`Congratulations ${userSignUp.name}!`, 'Your account has been created correctly, you can now sign in the application!', 'success');
           this.router.navigateByUrl("/login");
         },

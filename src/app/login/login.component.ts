@@ -53,7 +53,14 @@ export class LoginComponent implements OnInit {
     let element = document.getElementById('button-google');
     this.auth2.attachClickHandler(element, {}, (googleUser) => {
       const token = googleUser.getAuthResponse().id_token;
-      console.log('token', token);
+      this.userService.signInGoogle(token).subscribe(
+        loginSuccess => this.handlerLoginSuccess(loginSuccess),
+        err => {
+          console.warn(err);
+          this.toastr.error(err, 'Login failed!', {
+            disableTimeOut: true, closeButton: true
+          });
+        });
     });
   }
 
@@ -68,23 +75,23 @@ export class LoginComponent implements OnInit {
     }
 
     this.userService.signIn(userSignIn).subscribe(
-      loginSuccess => {
-        localStorage.setItem('APP-USER-ID', loginSuccess.userId);
-        //localStorage.setItem('APP-USER-NAME', loginSuccess.name);
-        localStorage.setItem('APP-TOKEN', loginSuccess.accessToken);
-        this.toastr.success(`Welcome ${loginSuccess.name}`, 'Login success!', {
-          closeButton: true, progressAnimation: "decreasing", progressBar: true, timeOut: 10000
-        });
-        this.router.navigateByUrl("/dashboard");
-      },
+      loginSuccess => this.handlerLoginSuccess(loginSuccess),
       err => {
         this.toastr.error('Invalid credentials', 'Login failed!', {
           disableTimeOut: true, closeButton: true
         });
-      }
-    );
+      });
+  }
 
-    //this.router.navigateByUrl("/dashboard");
+  private handlerLoginSuccess(userAuthenticated) {
+    console.log('userAuthenticated', userAuthenticated)
+    localStorage.setItem('APP-USER-ID', userAuthenticated.userId);
+    //localStorage.setItem('APP-USER-NAME', loginSuccess.name);
+    localStorage.setItem('APP-TOKEN', userAuthenticated.accessToken);
+    this.toastr.success(`Welcome ${userAuthenticated.name}`, 'Login success!', {
+      closeButton: true, progressAnimation: "decreasing", progressBar: true, timeOut: 10000
+    });
+    this.router.navigateByUrl("/dashboard");
 
   }
 }

@@ -17,6 +17,11 @@ export class UserService {
     return this.http.post<any>(endpoint, {email: user.email, password: user.password});
   }
 
+  public signInGoogle(token: String): Observable<any> {
+    const endpoint = `${environment.hospitalServiceUrl}/auth/login/google`;
+    return this.http.post<any>(endpoint, {token});
+  }
+
   public signUp(user: UserSignUpModel): Observable<UserModel> {
     const endpoint = `${environment.hospitalServiceUrl}/user/signup`;
     return this.http.post<UserModel>(endpoint, {...user});
