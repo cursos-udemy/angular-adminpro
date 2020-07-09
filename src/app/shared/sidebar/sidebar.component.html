@@ -8,8 +8,9 @@
     <nav class="sidebar-nav">
       <ul id="sidebarnav">
         <li class="user-profile">
-          <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><img src="assets/images/users/profile.png" alt="user"/>
-            <span class="hide-menu">Steave Jobs </span></a>
+          <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false">
+            <img [src]="user.image | image" alt="user"/>
+            <span class="hide-menu">{{user.name}}</span></a>
           <ul aria-expanded="false" class="collapse">
             <li><a href="javascript:void()">My Profile </a></li>
             <li><a href="javascript:void()">My Balance</a></li>
@@ -23,8 +24,9 @@
         <li *ngFor="let menu of sidebarService.menu">
           <a class="has-arrow waves-effect waves-dark" aria-expanded="false">
             <i [class]="menu.icon"></i>
-            <span class="hide-menu">{{menu.title}} <span *ngIf="menu.subMenu"
-                                                         class="label label-rouded label-themecolor pull-right">{{menu.subMenu.length}}</span></span>
+            <span class="hide-menu">{{menu.title}}
+              <span *ngIf="menu.subMenu" class="label label-rouded label-themecolor pull-right">{{menu.subMenu.length}}</span>
+            </span>
           </a>
           <ul *ngIf="menu.subMenu" aria-expanded="false" class="collapse">
             <li *ngFor="let submenu of menu.subMenu"><a [routerLink]="[submenu.url]" routerLinkActive="active">{{submenu.title}} </a></li>

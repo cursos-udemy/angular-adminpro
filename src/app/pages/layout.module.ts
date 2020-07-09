@@ -14,6 +14,7 @@ import {ChartComponent} from './charts/chart/chart.component';
 import {AccountSettingComponent} from './account-setting/account-setting.component';
 import {PromisesComponent} from './promises/promises.component';
 import {RxjsComponent} from './rxjs/rxjs.component';
+import {PipesModule} from "../pipes/pipes.module";
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {RxjsComponent} from './rxjs/rxjs.component';
     LayoutRoutingModule,
     SharedModule,
     FormsModule,
-    ChartsModule
+    ChartsModule,
+    PipesModule
   ],
   exports: [
     DashboardComponent,

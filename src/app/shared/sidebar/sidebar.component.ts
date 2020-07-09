@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {SidebarService} from "../../services/sidebar.service";
 import {UserService} from "../../services/user.service";
+import {UserModel} from "../../models/user.model";
 
 @Component({
   selector: 'app-sidebar',
@@ -8,6 +9,7 @@ import {UserService} from "../../services/user.service";
   styles: []
 })
 export class SidebarComponent implements OnInit {
+  public user: UserModel;
 
   constructor(
     public sidebarService: SidebarService,
@@ -16,6 +18,7 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
   }
 
   public logout(): void {

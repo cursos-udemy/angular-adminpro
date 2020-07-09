@@ -52,12 +52,14 @@ export class UserService {
   }
 
   private handlerLoginSuccess(userAuthenticated) {
-    localStorage.setItem('APP-USER-ID', userAuthenticated.userId);
+    localStorage.setItem('APP-USER', JSON.stringify(userAuthenticated.user));
+    localStorage.setItem('APP-USER-ID', userAuthenticated.user._id);
     localStorage.setItem('APP-TOKEN', userAuthenticated.accessToken);
   }
 
   private handlerLogoutSuccess() {
     localStorage.removeItem('APP-USER-ID');
+    localStorage.removeItem('APP-USER');
     localStorage.removeItem('APP-TOKEN');
   }
 }
