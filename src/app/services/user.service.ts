@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Observable, Subject} from "rxjs";
 import {tap} from "rxjs/operators";
 
 import {environment} from "../../environments/environment";
@@ -13,6 +13,8 @@ import {ToastrService} from "ngx-toastr";
 })
 export class UserService {
 
+  public userAuthenticated: Subject<UserModel> = new Subject<UserModel>()
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -22,6 +24,10 @@ export class UserService {
 
   public isUserAuthenticated(): boolean {
     return !!localStorage.getItem('APP-TOKEN');
+  }
+
+  get userInformation() {
+    return this.userAuthenticated;
   }
 
   public signIn(user: UserSignInModel): Observable<any> {
@@ -51,10 +57,24 @@ export class UserService {
     this.router.navigateByUrl("/login");
   }
 
+  public updateProfile(id: string, user: UserModel) {
+    const endpoint = `${environment.hospitalServiceUrl}/user/${id}`;
+    const token = localStorage.getItem('APP-TOKEN');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.put<UserModel>(endpoint, {...user}, httpOptions)
+      .pipe(tap(userUpdated => this.handleUpdateProfile(userUpdated)));
+  }
+
   private handlerLoginSuccess(userAuthenticated) {
     localStorage.setItem('APP-USER', JSON.stringify(userAuthenticated.user));
     localStorage.setItem('APP-USER-ID', userAuthenticated.user._id);
     localStorage.setItem('APP-TOKEN', userAuthenticated.accessToken);
+    this.userAuthenticated.next(userAuthenticated.user);
   }
 
   private handlerLogoutSuccess() {
@@ -62,4 +82,10 @@ export class UserService {
     localStorage.removeItem('APP-USER');
     localStorage.removeItem('APP-TOKEN');
   }
+
+  private handleUpdateProfile(userUpdated) {
+    localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
+    this.userAuthenticated.next(userUpdated);
+  }
+
 }

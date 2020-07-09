@@ -1,0 +1,40 @@
+<div class="row animated fadeIn">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">User Information</h4>
+        <h6 class="card-subtitle">made with bootstrap elements</h6>
+        <form class="form p-t-20" #form="ngForm" (ngSubmit)="handleSubmit(form)" ngNativeValidate>
+          <div class="form-group">
+            <label for="name">User Name</label>
+            <div class="input-group">
+              <div class="input-group-addon"><i class="ti-user"></i></div>
+              <input id="name" type="text" class="form-control" name="name" placeholder="name" [ngModel]="user.name" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <div class="input-group">
+              <div class="input-group-addon"><i class="ti-email"></i></div>
+              <input id="email" type="email" class="form-control" name="email" [disabled]="user.googleAccount" placeholder="Enter email" [ngModel]="user.email" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">User Image</h4>
+        <h6 class="card-subtitle">made with bootstrap elements</h6>
+        <img src="" alt="">
+        <input type="file">
+        <br><br>
+        <button type="button" class="btn btn-block btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Update Image</button>
+      </div>
+    </div>
+  </div>
+</div>

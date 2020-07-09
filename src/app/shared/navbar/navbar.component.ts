@@ -18,10 +18,12 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
+    this.userService.userInformation.subscribe(user => this.user = user);
   }
 
   public logout(): void {
     this.userService.logout();
   }
+
 
 }

@@ -8,6 +8,7 @@ import {AccountSettingComponent} from "./account-setting/account-setting.compone
 import {PromisesComponent} from "./promises/promises.component";
 import {RxjsComponent} from "./rxjs/rxjs.component";
 import {AuthGuard} from "../services/guards/auth.guard";
+import {ProfileComponent} from "./profile/profile.component";
 
 
 const routes: Routes = [
@@ -22,6 +23,7 @@ const routes: Routes = [
       {path: 'chart', component: ChartComponent, data: {title: 'Chart'}, canActivate: [AuthGuard]},
       {path: 'promises', component: PromisesComponent, data: {title: 'Promises'}, canActivate: [AuthGuard]},
       {path: 'rxjs', component: RxjsComponent, data: {title: 'RxJs'}, canActivate: [AuthGuard]},
+      {path: 'profile', component: ProfileComponent, data: {title: 'Profile'}, canActivate: [AuthGuard]},
       {path: '', redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthGuard]},
     ]
   },

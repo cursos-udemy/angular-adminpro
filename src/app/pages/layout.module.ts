@@ -15,6 +15,7 @@ import {AccountSettingComponent} from './account-setting/account-setting.compone
 import {PromisesComponent} from './promises/promises.component';
 import {RxjsComponent} from './rxjs/rxjs.component';
 import {PipesModule} from "../pipes/pipes.module";
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {PipesModule} from "../pipes/pipes.module";
     ChartComponent,
     AccountSettingComponent,
     PromisesComponent,
-    RxjsComponent
+    RxjsComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,

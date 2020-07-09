@@ -12,7 +12,6 @@ const MODEL_TYPES = [MODEL_HOSPITAL, MODEL_USER, MODEL_DOCTOR];
 export class ImagePipe implements PipeTransform {
 
   transform(value: string, modelType: string = MODEL_USER): string {
-    console.log(value)
     if (!value) return 'assets/images/users/image-default.svg';
     if (value.includes('https://')) return value;
 

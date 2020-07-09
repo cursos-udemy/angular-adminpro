@@ -9,6 +9,7 @@ import {UserModel} from "../../models/user.model";
   styles: []
 })
 export class SidebarComponent implements OnInit {
+
   public user: UserModel;
 
   constructor(
@@ -19,6 +20,7 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
+    this.userService.userInformation.subscribe(user => this.user = user);
   }
 
   public logout(): void {

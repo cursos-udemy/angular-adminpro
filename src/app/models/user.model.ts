@@ -1,9 +1,10 @@
 export interface UserModel {
-  id: string
+  _id: string
   email: string,
   name: string
   image?: string
   role: string,
+  googleAccount: boolean
 }
 
 export interface UserSignInModel {
