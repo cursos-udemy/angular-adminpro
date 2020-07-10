@@ -13,7 +13,7 @@ import {ToastrService} from "ngx-toastr";
 })
 export class UserService {
 
-  public userAuthenticated: Subject<UserModel> = new Subject<UserModel>()
+  private userAuthenticated: Subject<UserModel> = new Subject<UserModel>()
 
   constructor(
     private http: HttpClient,
@@ -70,6 +70,11 @@ export class UserService {
       .pipe(tap(userUpdated => this.handleUpdateProfile(userUpdated)));
   }
 
+  public updateImage(userUpdated) {
+    localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
+    this.userAuthenticated.next(userUpdated);
+  }
+
   private handlerLoginSuccess(userAuthenticated) {
     localStorage.setItem('APP-USER', JSON.stringify(userAuthenticated.user));
     localStorage.setItem('APP-USER-ID', userAuthenticated.user._id);
@@ -87,5 +92,4 @@ export class UserService {
     localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
     this.userAuthenticated.next(userUpdated);
   }
-
 }

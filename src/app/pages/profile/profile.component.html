@@ -16,7 +16,8 @@
             <label for="email">Email address</label>
             <div class="input-group">
               <div class="input-group-addon"><i class="ti-email"></i></div>
-              <input id="email" type="email" class="form-control" name="email" [disabled]="user.googleAccount" placeholder="Enter email" [ngModel]="user.email" required>
+              <input id="email" type="email" class="form-control" name="email" [disabled]="user.googleAccount" placeholder="Enter email"
+                     [ngModel]="user.email" required>
             </div>
           </div>
           <button type="submit" class="btn btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Submit</button>
@@ -27,13 +28,26 @@
 
   <div class="col-lg-6">
     <div class="card">
-      <div class="card-body">
+      <div class="card-body" align="center">
         <h4 class="card-title">User Image</h4>
         <h6 class="card-subtitle">made with bootstrap elements</h6>
-        <img src="" alt="">
-        <input type="file">
+
+        <div class="form-group">
+          <img *ngIf="!imagePreview" [src]="user.image | image" [alt]="user.name" class="w150">
+          <img *ngIf="imagePreview" [src]="imagePreview" [alt]="user.name" class="w150">
+        </div>
+        <input (change)="selectImage($event)" type="file" class="" id="userImage" aria-describedby="userImage">
+        <!--        <label class="custom-file-label" for="userImage">{{fileNameSelected}}</label>-->
+        <div *ngIf="uploadProgress > 0" class="progress">
+          <div class="progress-bar" role="progressbar" [ngStyle]="{width:uploadProgress+'%'}" style="width: 75%;height:15px;"
+               attr.aria-valuenow="{{uploadProgress}}" aria-valuemin="0" aria-valuemax="100">
+            {{uploadProgress}}%
+          </div>
+        </div>
         <br><br>
-        <button type="button" class="btn btn-block btn-success waves-effect waves-light m-r-10"><i class="fa fa-save"></i> Update Image</button>
+        <button (click)="uploadImage()" [disabled]="!imageSelected" type="button" class="btn btn-block btn-success waves-effect waves-light m-r-10"><i
+          class="fa fa-save"></i> Update Image
+        </button>
       </div>
     </div>
   </div>
