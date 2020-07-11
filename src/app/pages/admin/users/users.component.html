@@ -1,0 +1,59 @@
+<div class="row animated fadeIn">
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <input [(ngModel)]="searchText" (keyup)="onKeyUpSearchText()" type="text" class="form-control" placeholder="Search users">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row animated fadeIn">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Registered users ( <small>{{totalItems}}</small>)</h3>
+        <table class="table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>Image</th>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Auth</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of users | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
+            <td class="w-70"><img [src]="user.image | image" class="img-50 img-circle"> </td>
+            <td>{{user.email}}</td>
+            <td>{{user.name}}</td>
+            <td>{{user.role}}</td>
+            <td>
+              <label *ngIf="user.googleAccount" class="label label-danger">Google</label>
+              <label *ngIf="!user.googleAccount" class="label label-info">Application</label>
+            </td>
+            <td>
+              <button class="btn btn-primary"><i class="fa fa-save"></i></button>
+              <button class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+            </td>
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="12">
+              <div class="text-right">
+                <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+              </div>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <ngx-loading [show]="loading" [config]="{ backdropBackgroundColour: 'rgba(0, 0, 0, 0.05)' }" class="animated fadeIn"></ngx-loading>
+</div>

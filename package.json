@@ -21,6 +21,8 @@
     "@angular/router": "~9.1.4",
     "chart.js": "^2.9.3",
     "ng2-charts": "^2.3.2",
+    "ngx-loading": "^8.0.0",
+    "ngx-pagination": "^5.0.0",
     "ngx-toastr": "^12.1.0",
     "rxjs": "~6.5.4",
     "sweetalert2": "^9.15.2",

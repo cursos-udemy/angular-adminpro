@@ -18,13 +18,13 @@ import {PipesModule} from "../pipes/pipes.module";
     BreadcrumbComponent,
     NotFoundComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
   ],
   exports: [
     BreadcrumbComponent,
     NotFoundComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
   ]
 })
 export class SharedModule {

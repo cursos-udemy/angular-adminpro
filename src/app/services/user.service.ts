@@ -7,6 +7,7 @@ import {environment} from "../../environments/environment";
 import {UserModel, UserSignInModel, UserSignUpModel} from "../models/user.model";
 import {Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
+import {DataPaginator} from "../models/paginator";
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +23,14 @@ export class UserService {
   ) {
   }
 
+  get userInformation() {
+    return this.userAuthenticated;
+  }
+
   public isUserAuthenticated(): boolean {
     return !!localStorage.getItem('APP-TOKEN');
   }
 
-  get userInformation() {
-    return this.userAuthenticated;
-  }
 
   public signIn(user: UserSignInModel): Observable<any> {
     const endpoint = `${environment.hospitalServiceUrl}/auth/login`;
@@ -91,5 +93,13 @@ export class UserService {
   private handleUpdateProfile(userUpdated) {
     localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
     this.userAuthenticated.next(userUpdated);
+  }
+
+  public find(page: number = 1, limit: number = 100): Observable<DataPaginator> {
+    return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/user?page=${page}&limit=${limit}`);
+  }
+
+  public search(text: string, page: number = 1, limit: number = 100): Observable<DataPaginator> {
+    return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/search/user/${text}?page=${page}&limit=${limit}`);
   }
 }

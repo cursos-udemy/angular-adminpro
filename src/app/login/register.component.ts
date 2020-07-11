@@ -7,8 +7,6 @@ import {UserSignUpModel} from "../models/user.model";
 import {UserService} from "../services/user.service";
 import {Router} from "@angular/router";
 
-declare function initPlugins();
-
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -25,7 +23,6 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    initPlugins();
     this.signupForm = new FormGroup({
         name: new FormControl(null, [Validators.required, Validators.minLength(3)]),
         email: new FormControl(null, [Validators.required, Validators.email]),

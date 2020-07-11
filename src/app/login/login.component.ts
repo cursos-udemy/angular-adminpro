@@ -5,8 +5,6 @@ import {UserSignInModel} from "../models/user.model";
 import {UserService} from "../services/user.service";
 import {ToastrService} from "ngx-toastr";
 
-declare function initPlugins();
-
 declare const gapi: any;
 
 @Component({
@@ -28,8 +26,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    initPlugins();
-
     this.googleInit();
     const emailRemembered = localStorage.getItem('APP-REMEMBER-ME');
     if (emailRemembered) {
