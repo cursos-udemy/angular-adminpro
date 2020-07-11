@@ -30,13 +30,18 @@
             <td class="w-70"><img [src]="user.image | image" class="img-50 img-circle"> </td>
             <td>{{user.email}}</td>
             <td>{{user.name}}</td>
-            <td>{{user.role}}</td>
+            <td>
+              <select [(ngModel)]="user.role" name="role" class="form-control" [disabled]="isThisUser(user)" >
+                <option value="ROLE_USER">ROLE_USER</option>
+                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+              </select>
+            </td>
             <td>
               <label *ngIf="user.googleAccount" class="label label-danger">Google</label>
               <label *ngIf="!user.googleAccount" class="label label-info">Application</label>
             </td>
             <td>
-              <button class="btn btn-primary"><i class="fa fa-save"></i></button>
+              <button *ngIf="!isThisUser(user)" (click)="handleUpdateRole(user)" class="btn btn-primary"><i class="fa fa-save"></i></button>
               <button *ngIf="!isThisUser(user)" (click)="handleDeleteUser(user)" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
             </td>
           </tr>

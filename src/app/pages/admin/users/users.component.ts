@@ -15,7 +15,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   public userAuthenticated: UserModel;
   public userSubscription: Subscription;
-  public itemsPerPage: number = 3;
+  public itemsPerPage: number = 4;
   public currentPage: number = 1;
   public totalItems: number = 0;
   public users: UserModel[] = [];
@@ -112,9 +112,42 @@ export class UsersComponent implements OnInit, OnDestroy {
             this.toastr.success(`User ${user.name} has been successfully removed.`, 'Congratulations', {
               closeButton: true, progressAnimation: "decreasing", progressBar: true, timeOut: 3000
             });
-            this.updateUserList();
+            this.users = this.users.filter(u => u._id != user._id);
+            this.totalItems--;
           },
           err => this.toastr.error(err.error.message, 'Delete user failed!', {closeButton: true, timeOut: 3000})
+        );
+      }
+    });
+  }
+
+  public handleUpdateRole(user: UserModel) {
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+      title: `¿Are you sure to change to rol ${user.role}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Updated!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        this.userService.updateRole(user._id, user.role).subscribe(
+          resp => {
+            this.toastr.success(`User role has been successfully updated.`, 'Congratulations', {
+              closeButton: true, timeOut: 3000
+            });
+            this.updateUserList();
+          },
+          err => this.toastr.error(err.error.message, 'Update user role failed!', {closeButton: true, timeOut: 3000})
         );
       }
     });

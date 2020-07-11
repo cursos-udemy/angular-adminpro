@@ -59,7 +59,6 @@ export class UserService {
   }
 
   public updateProfile(id: string, user: UserModel) {
-    const endpoint = `${environment.hospitalServiceUrl}/user/${id}`;
     const token = localStorage.getItem('APP-TOKEN');
     const httpOptions = {
       headers: new HttpHeaders({
@@ -67,8 +66,19 @@ export class UserService {
         'Authorization': `Bearer ${token}`
       })
     };
-    return this.http.put<UserModel>(endpoint, {...user}, httpOptions)
+    return this.http.put<UserModel>(`${environment.hospitalServiceUrl}/user/profile/${id}`, {...user}, httpOptions)
       .pipe(tap(userUpdated => this.handleUpdateProfile(userUpdated)));
+  }
+
+  public updateRole(id: string, newRole: string) {
+    const token = localStorage.getItem('APP-TOKEN');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.put<UserModel>(`${environment.hospitalServiceUrl}/user/admin/${id}`, {role: newRole}, httpOptions);
   }
 
   public updateImage(userUpdated) {
