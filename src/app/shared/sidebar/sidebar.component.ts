@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SidebarService} from "../../services/sidebar.service";
 import {UserService} from "../../services/user.service";
 import {UserModel} from "../../models/user.model";
@@ -8,7 +8,7 @@ import {UserModel} from "../../models/user.model";
   templateUrl: './sidebar.component.html',
   styles: []
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
 
   public user: UserModel;
 
@@ -21,6 +21,9 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
     this.userService.userInformation.subscribe(user => this.user = user);
+  }
+
+  ngOnDestroy() {
   }
 
   public logout(): void {

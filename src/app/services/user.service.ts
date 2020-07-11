@@ -31,7 +31,6 @@ export class UserService {
     return !!localStorage.getItem('APP-TOKEN');
   }
 
-
   public signIn(user: UserSignInModel): Observable<any> {
     const endpoint = `${environment.hospitalServiceUrl}/auth/login`;
     return this.http.post<any>(endpoint, {email: user.email, password: user.password})
@@ -101,5 +100,16 @@ export class UserService {
 
   public search(text: string, page: number = 1, limit: number = 100): Observable<DataPaginator> {
     return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/search/user/${text}?page=${page}&limit=${limit}`);
+  }
+
+  public delete(id: string): Observable<any> {
+    const token = localStorage.getItem('APP-TOKEN');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
+    return this.http.delete(`${environment.hospitalServiceUrl}/user/${id}`, httpOptions);
   }
 }
