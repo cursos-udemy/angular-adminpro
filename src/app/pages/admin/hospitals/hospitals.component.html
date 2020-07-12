@@ -1,0 +1,53 @@
+<div class="row animated fadeIn">
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <input [(ngModel)]="searchText" (keyup)="onKeyUpSearchText()" type="text" class="form-control" placeholder="Search hospitals">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row animated fadeIn">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Registered hospitals (<small>{{totalItems}}</small>)</h3>
+        <button type="button" (click)="addHospitalModal()" class="btn btn-primary"><i class="fa fa-plus"></i> Add Hospital</button>
+        <table class="table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>Image</th>
+            <th>name</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let hospital of hospitals | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
+            <td class="w70">
+              <img (click)="openUploadImageModal(hospital)" [src]="hospital.image | image: 'hospital' " class="img-50 img-circle pointer">
+            </td>
+            <td><input [(ngModel)]="hospital.name" type="text" class="form-control"></td>
+            <td class="w120">
+              <button *ngIf="isUserAdmin()" (click)="handleUpdateHospital(hospital)" class="btn btn-primary"><i class="fa fa-save"></i></button>
+              <button *ngIf="isUserAdmin()" (click)="handleDeleteHospital(hospital)" class="btn btn-danger  ml-2"><i class="fa fa-trash-o"></i></button>
+            </td>
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="12">
+              <div class="text-right">
+                <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
+              </div>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <ngx-loading [show]="loading" [config]="{ backdropBackgroundColour: 'rgba(0, 0, 0, 0.05)' }" class="animated fadeIn"></ngx-loading>
+</div>

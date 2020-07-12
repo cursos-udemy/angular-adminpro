@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpEventType} from "@angular/common/http";
-import {UserService} from "../../services/user.service";
 import {FileUploadService} from "../../services/file-upload.service";
 import {ToastrService} from "ngx-toastr";
 import {ModalUploadService} from "./modal-upload.service";
@@ -16,7 +15,6 @@ export class ModalUploadComponent implements OnInit {
   public imagePreview: string | ArrayBuffer;
 
   constructor(
-    private userService: UserService,
     private fileUploadService: FileUploadService,
     private toastr: ToastrService,
     private modalUploadService: ModalUploadService) {

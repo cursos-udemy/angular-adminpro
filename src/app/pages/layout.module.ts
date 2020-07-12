@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from "@angular/forms";
 import {ChartsModule} from 'ng2-charts';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {NgxLoadingModule} from "ngx-loading";
 
 import {LayoutRoutingModule} from './layout-routing.module';
 import {SharedModule} from "../shared/shared.module";
@@ -19,8 +20,8 @@ import {PromisesComponent} from './promises/promises.component';
 import {RxjsComponent} from './rxjs/rxjs.component';
 import {ProfileComponent} from './profile/profile.component';
 import {UsersComponent} from './admin/users/users.component';
-import {NgxLoadingModule} from "ngx-loading";
 import {ModalUploadComponent} from "../components/modal-upload/modal-upload.component";
+import {HospitalsComponent} from './admin/hospitals/hospitals.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {ModalUploadComponent} from "../components/modal-upload/modal-upload.comp
     RxjsComponent,
     ProfileComponent,
     UsersComponent,
-    ModalUploadComponent
+    ModalUploadComponent,
+    HospitalsComponent
   ],
   imports: [
     CommonModule,

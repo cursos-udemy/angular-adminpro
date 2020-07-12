@@ -150,11 +150,14 @@ export class UsersComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.value) {
         this.userService.updateRole(user._id, user.role).subscribe(
-          resp => {
+          userUpdated => {
             this.toastr.success(`User role has been successfully updated.`, 'Congratulations', {
               closeButton: true, timeOut: 3000
             });
-            this.updateUserList();
+            this.users = this.users.map( u => {
+              if (u._id === userUpdated._id) u.role = userUpdated.role;
+              return u;
+            });
           },
           err => this.toastr.error(err.error.message, 'Update user role failed!', {closeButton: true, timeOut: 3000})
         );
