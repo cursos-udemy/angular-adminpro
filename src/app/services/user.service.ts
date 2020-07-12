@@ -122,4 +122,9 @@ export class UserService {
     };
     return this.http.delete(`${environment.hospitalServiceUrl}/user/${id}`, httpOptions);
   }
+
+  public notifyUserUpdated(userUpdated: UserModel) {
+    localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
+    this.userAuthenticated.next(userUpdated);
+  }
 }

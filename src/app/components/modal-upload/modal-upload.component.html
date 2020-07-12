@@ -1,0 +1,30 @@
+<div class="app-modal-open app-modal-animated fadeIn" *ngIf="modalIsOpen()">
+
+  <div *ngIf="modalIsOpen()" class="modal" tabindex="-1" role="dialog" style="display: block;">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><b> <small>{{modelType}}: {{modelName}}</small></b></h5>
+          <button type="button" (click)="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" align="center">
+          <div class="form-group">
+            <img *ngIf="!imagePreview" [src]="modelImage | image" [alt]="modelName" class="w150">
+            <img *ngIf="imagePreview" [src]="imagePreview" [alt]="modelName" class="w150">
+          </div>
+          <input (change)="selectImage($event)" type="file" class="" id="userImage" aria-describedby="userImage">
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" (click)="closeModal()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button (click)="uploadImage()" [disabled]="!imageSelected" type="button" class="btn btn-primary">
+            <i class="fa fa-save"></i> Update Image
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

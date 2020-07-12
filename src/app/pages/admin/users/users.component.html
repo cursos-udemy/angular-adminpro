@@ -27,7 +27,9 @@
           </thead>
           <tbody>
           <tr *ngFor="let user of users | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
-            <td class="w-70"><img [src]="user.image | image" class="img-50 img-circle"> </td>
+            <td class="w-70" data-toggle="modal" data-target="#exampleModal">
+              <img (click)="openUploadImageModal(user)" [src]="user.image | image" class="img-50 img-circle pointer">
+            </td>
             <td>{{user.email}}</td>
             <td>{{user.name}}</td>
             <td>

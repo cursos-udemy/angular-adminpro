@@ -5,6 +5,7 @@ import {DataPaginator} from "../../../models/paginator";
 import Swal from "sweetalert2";
 import {Subscription} from "rxjs";
 import {ToastrService} from "ngx-toastr";
+import {ModalUploadService} from "../../../components/modal-upload/modal-upload.service";
 
 @Component({
   selector: 'app-users',
@@ -13,29 +14,37 @@ import {ToastrService} from "ngx-toastr";
 })
 export class UsersComponent implements OnInit, OnDestroy {
 
+  private userSubscription: Subscription;
+  private uploadImageSubscription: Subscription;
+
   public userAuthenticated: UserModel;
-  public userSubscription: Subscription;
   public itemsPerPage: number = 4;
   public currentPage: number = 1;
   public totalItems: number = 0;
   public users: UserModel[] = [];
   public loading: boolean = false;
-
   public searchText: string;
 
   constructor(
     private userService: UserService,
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    private modalUploadService: ModalUploadService) {
   }
 
   ngOnInit(): void {
     this.userAuthenticated = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
     this.userSubscription = this.userService.userInformation.subscribe(user => this.userAuthenticated = user);
     this.getUsers(this.currentPage, this.itemsPerPage);
+    this.uploadImageSubscription = this.modalUploadService.uploadNotificationEvent
+      .subscribe(upload => {
+        this.updateUserList();
+        this.userService.notifyUserUpdated(upload.modelUpdated);
+      });
   }
 
   ngOnDestroy() {
     this.userSubscription.unsubscribe();
+    this.uploadImageSubscription.unsubscribe();
   }
 
   public onPageChange(event: number) {
@@ -155,5 +164,9 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   public isThisUser(user: UserModel): boolean {
     return user._id === this.userAuthenticated._id;
+  }
+
+  public openUploadImageModal(user: UserModel): void {
+    this.modalUploadService.openModal('user', user._id, user.name, user.image);
   }
 }

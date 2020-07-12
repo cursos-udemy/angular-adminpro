@@ -20,6 +20,7 @@ import {RxjsComponent} from './rxjs/rxjs.component';
 import {ProfileComponent} from './profile/profile.component';
 import {UsersComponent} from './admin/users/users.component';
 import {NgxLoadingModule} from "ngx-loading";
+import {ModalUploadComponent} from "../components/modal-upload/modal-upload.component";
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {NgxLoadingModule} from "ngx-loading";
     PromisesComponent,
     RxjsComponent,
     ProfileComponent,
-    UsersComponent
+    UsersComponent,
+    ModalUploadComponent
   ],
   imports: [
     CommonModule,
@@ -43,7 +45,7 @@ import {NgxLoadingModule} from "ngx-loading";
     ChartsModule,
     PipesModule,
     NgxPaginationModule,
-    NgxLoadingModule.forRoot({})
+    NgxLoadingModule.forRoot({}),
   ],
   exports: [
     LayoutRoutingModule

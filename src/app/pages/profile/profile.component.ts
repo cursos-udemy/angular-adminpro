@@ -28,7 +28,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
-    //this.userService.userInformation.subscribe(user => this.user = user);
     this.initialValues();
   }
 
@@ -114,8 +113,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private initialValues(){
     this.imageSelected = null;
     this.fileNameSelected = "Select an image";
-    //this.imagePreview = null;
     this.uploadProgress = 0;
   }
-
 }
