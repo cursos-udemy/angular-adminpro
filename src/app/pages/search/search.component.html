@@ -1,0 +1,59 @@
+<div class="row">
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Users ({{users.length}})</h4>
+        <table class="table table-hover" *ngIf="users.length > 0">
+          <tbody>
+          <tr *ngFor="let user of users" [routerLink]="['/users']" class="pointer">
+            <td class="w70">
+              <img [src]="user.image | image: 'user' " class="img-50 img-circle pointer">
+            </td>
+            <td>{{user.name}}</td>
+          </tr>
+          </tbody>
+        </table>
+        <div *ngIf="users.length == 0" class="alert info"> <i class="ti-user"></i> No users found.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Hospitals ({{hospitals.length}})</h4>
+        <table class="table table-hover">
+          <tbody>
+          <tr *ngFor="let hospital of hospitals" [routerLink]="['/hospitals']" class="pointer">
+            <td class="w70">
+              <img [src]="hospital.image | image: 'hospital' " class="img-50 img-circle pointer">
+            </td>
+            <td>{{hospital.name}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-4">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Doctors ({{doctors.length}})</h4>
+        <table class="table table-hover">
+          <tbody>
+          <tr *ngFor="let doctor of doctors" [routerLink]="['/doctor', doctor._id]" class="pointer">
+            <td class="w70">
+              <img [src]="doctor.image | image: 'doctor' " class="img-50 img-circle pointer">
+            </td>
+            <td>{{doctor.name}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -24,6 +24,7 @@ import {ModalUploadComponent} from "../components/modal-upload/modal-upload.comp
 import {HospitalsComponent} from './admin/hospitals/hospitals.component';
 import { DoctorsComponent } from './admin/doctors/doctors.component';
 import { DoctorFormComponent } from './admin/doctors/doctor-form.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { DoctorFormComponent } from './admin/doctors/doctor-form.component';
     ModalUploadComponent,
     HospitalsComponent,
     DoctorsComponent,
-    DoctorFormComponent
+    DoctorFormComponent,
+    SearchComponent
   ],
   imports: [
     CommonModule,

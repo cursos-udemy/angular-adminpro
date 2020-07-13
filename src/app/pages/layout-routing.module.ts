@@ -14,6 +14,7 @@ import {UsersComponent} from "./admin/users/users.component";
 import {HospitalsComponent} from "./admin/hospitals/hospitals.component";
 import {DoctorsComponent} from "./admin/doctors/doctors.component";
 import {DoctorFormComponent} from "./admin/doctors/doctor-form.component";
+import {SearchComponent} from "./search/search.component"
 
 const routes: Routes = [
   {
@@ -33,6 +34,7 @@ const routes: Routes = [
       {path: 'doctors', component: DoctorsComponent, data: {title: 'Doctors'}, canActivate: [AuthGuard]},
       {path: 'doctor', component: DoctorFormComponent, data: {title: 'New Doctor'}, canActivate: [AuthGuard]},
       {path: 'doctor/:id', component: DoctorFormComponent, data: {title: 'Edit Doctor'}, canActivate: [AuthGuard]},
+      {path: 'search/:text', component: SearchComponent, data: {title: 'Search'}, canActivate: [AuthGuard]},
       {path: '', redirectTo: '/dashboard', pathMatch: 'full', canActivate: [AuthGuard]},
     ]
   },
