@@ -18,7 +18,6 @@ export class HospitalsComponent implements OnInit, OnDestroy {
 
   private uploadImageSubscription: Subscription;
 
-  //public userAuthenticated: UserModel;
   public hospitals: HospitalModel[] = [];
   public itemsPerPage: number = 4;
   public currentPage: number = 1;
@@ -33,8 +32,7 @@ export class HospitalsComponent implements OnInit, OnDestroy {
     private modalUploadService: ModalUploadService) {
   }
 
-  ngOnInit(): void {
-    //this.userAuthenticated = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
+  ngOnInit(): void {//this.userAuthenticated = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
     this.getHospitals(this.currentPage, this.itemsPerPage);
     this.uploadImageSubscription = this.modalUploadService.uploadNotificationEvent
       .subscribe(upload => this.updateHospitalList());
@@ -46,11 +44,7 @@ export class HospitalsComponent implements OnInit, OnDestroy {
 
   public onPageChange(event: number) {
     this.currentPage = event;
-    if (this.searchText && this.searchText.trim().length > 0) {
-      this.searchHospitals(this.searchText, this.currentPage, this.itemsPerPage);
-    } else {
-      this.getHospitals(this.currentPage, this.itemsPerPage);
-    }
+    this.updateHospitalList();
   }
 
   public onKeyUpSearchText() {

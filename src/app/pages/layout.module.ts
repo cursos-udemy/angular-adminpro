@@ -22,6 +22,8 @@ import {ProfileComponent} from './profile/profile.component';
 import {UsersComponent} from './admin/users/users.component';
 import {ModalUploadComponent} from "../components/modal-upload/modal-upload.component";
 import {HospitalsComponent} from './admin/hospitals/hospitals.component';
+import { DoctorsComponent } from './admin/doctors/doctors.component';
+import { DoctorFormComponent } from './admin/doctors/doctor-form.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,9 @@ import {HospitalsComponent} from './admin/hospitals/hospitals.component';
     ProfileComponent,
     UsersComponent,
     ModalUploadComponent,
-    HospitalsComponent
+    HospitalsComponent,
+    DoctorsComponent,
+    DoctorFormComponent
   ],
   imports: [
     CommonModule,

@@ -19,8 +19,7 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private toastr: ToastrService
-  ) {
+    private toastr: ToastrService) {
   }
 
   get userInformation() {
@@ -59,25 +58,13 @@ export class UserService {
   }
 
   public updateProfile(id: string, user: UserModel) {
-    const token = localStorage.getItem('APP-TOKEN');
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      })
-    };
+    const httpOptions = this.getHttpHeaders();
     return this.http.put<UserModel>(`${environment.hospitalServiceUrl}/user/profile/${id}`, {...user}, httpOptions)
       .pipe(tap(userUpdated => this.handleUpdateProfile(userUpdated)));
   }
 
   public updateRole(id: string, newRole: string) {
-    const token = localStorage.getItem('APP-TOKEN');
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      })
-    };
+    const httpOptions = this.getHttpHeaders();
     return this.http.put<UserModel>(`${environment.hospitalServiceUrl}/user/admin/${id}`, {role: newRole}, httpOptions);
   }
 
@@ -113,18 +100,22 @@ export class UserService {
   }
 
   public delete(id: string): Observable<any> {
-    const token = localStorage.getItem('APP-TOKEN');
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      })
-    };
+    const httpOptions = this.getHttpHeaders();
     return this.http.delete(`${environment.hospitalServiceUrl}/user/${id}`, httpOptions);
   }
 
   public notifyUserUpdated(userUpdated: UserModel) {
     localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
     this.userAuthenticated.next(userUpdated);
+  }
+
+  private getHttpHeaders() {
+    const token = localStorage.getItem('APP-TOKEN');
+    return {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    };
   }
 }

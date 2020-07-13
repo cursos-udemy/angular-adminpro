@@ -49,11 +49,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   public onPageChange(event: number) {
     this.currentPage = event;
-    if (this.searchText && this.searchText.trim().length > 0) {
-      this.searchUsers(this.searchText, this.currentPage, this.itemsPerPage);
-    } else {
-      this.getUsers(this.currentPage, this.itemsPerPage);
-    }
+    this.updateUserList();
   }
 
   public onKeyUpSearchText() {

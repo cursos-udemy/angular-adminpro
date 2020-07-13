@@ -17,7 +17,7 @@ export class HospitalService {
     return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/hospital?page=${page}&limit=${limit}`);
   }
 
-  public findById(id: number): Observable<HospitalModel> {
+  public findById(id: string): Observable<HospitalModel> {
     return this.http.get<HospitalModel>(`${environment.hospitalServiceUrl}/hospital/${id}`);
   }
 
@@ -26,36 +26,27 @@ export class HospitalService {
   }
 
   public update(id: string, newName: string) {
-    const token = localStorage.getItem('APP-TOKEN');
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      })
-    };
+    const httpOptions = this.getHttpHeaders();
     return this.http.put<UserModel>(`${environment.hospitalServiceUrl}/hospital/${id}`, {name: newName}, httpOptions);
   }
 
   public delete(id: string): Observable<any> {
-    const token = localStorage.getItem('APP-TOKEN');
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      })
-    };
+    const httpOptions = this.getHttpHeaders();
     return this.http.delete(`${environment.hospitalServiceUrl}/hospital/${id}`, httpOptions);
   }
 
   public save(hospitalName: string): Observable<HospitalModel> {
+    const httpOptions = this.getHttpHeaders();
+    return this.http.post<HospitalModel>(`${environment.hospitalServiceUrl}/hospital/`, {name: hospitalName}, httpOptions);
+  }
+
+  private getHttpHeaders() {
     const token = localStorage.getItem('APP-TOKEN');
-    const httpOptions = {
+    return {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
       })
     };
-    return this.http.post<HospitalModel>(`${environment.hospitalServiceUrl}/hospital/`, {name: hospitalName}, httpOptions);
   }
-
 }

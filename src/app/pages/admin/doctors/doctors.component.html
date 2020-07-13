@@ -2,7 +2,7 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <input [(ngModel)]="searchText" (keyup)="onKeyUpSearchText()" type="text" class="form-control" placeholder="Search hospitals">
+        <input [(ngModel)]="searchText" (keyup)="onKeyUpSearchText()" type="text" class="form-control" placeholder="Search doctors">
       </div>
     </div>
   </div>
@@ -12,25 +12,27 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h3 class="card-title">Registered hospitals (<small>{{totalItems}}</small>)</h3>
-        <button type="button" (click)="addHospitalModal()" class="btn btn-primary"><i class="fa fa-plus"></i> Add Hospital</button>
+        <h3 class="card-title">Registered doctors (<small>{{totalItems}}</small>)</h3>
+        <button type="button" routerLink="/doctor" class="btn btn-primary"><i class="fa fa-plus"></i> Add Doctor</button>
         <table class="table table-bordered table-hover">
           <thead>
           <tr>
             <th>Image</th>
             <th>name</th>
+            <th>hospital</th>
             <th>Actions</th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let hospital of hospitals | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
+          <tr *ngFor="let doctor of doctors | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
             <td class="w70">
-              <img (click)="openUploadImageModal(hospital)" [src]="hospital.image | image: 'hospital' " class="img-50 img-circle pointer">
+              <img (click)="openUploadImageModal(doctor)" [src]="doctor.image | image: 'doctor' " class="img-50 img-circle pointer">
             </td>
-            <td><input [(ngModel)]="hospital.name" type="text" class="form-control"></td>
+            <td>{{doctor.name}}</td>
+            <td>{{doctor.hospital.name}}</td>
             <td class="w120">
-              <button *ngIf="isUserAdmin()" (click)="handleUpdateHospital(hospital)" class="btn btn-primary"><i class="fa fa-save"></i></button>
-              <button *ngIf="isUserAdmin()" (click)="handleDeleteHospital(hospital)" class="btn btn-danger  ml-2"><i class="fa fa-trash-o"></i></button>
+              <button *ngIf="isUserAdmin()" [routerLink]="['/doctor', doctor._id]" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+              <button *ngIf="isUserAdmin()" (click)="handleDeleteDoctor(doctor)" class="btn btn-danger  ml-2"><i class="fa fa-trash-o"></i></button>
             </td>
           </tr>
           </tbody>
