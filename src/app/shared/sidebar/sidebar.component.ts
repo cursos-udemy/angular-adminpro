@@ -12,7 +12,7 @@ import {Subscription} from "rxjs";
 export class SidebarComponent implements OnInit, OnDestroy {
 
   public user: UserModel;
-  private userSubscription: Subscription;
+  //private userSubscription: Subscription;
 
   constructor(
     public sidebarService: SidebarService,
@@ -22,11 +22,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
-    this.userSubscription = this.userService.userInformation.subscribe(user => this.user = user);
+    this.userService.userInformation.subscribe(user => {
+      this.user = user;
+      this.sidebarService.loadMenu();
+    });
   }
 
   ngOnDestroy() {
-    this.userSubscription.unsubscribe();
+    //this.userSubscription.unsubscribe();
   }
 
   public logout(): void {

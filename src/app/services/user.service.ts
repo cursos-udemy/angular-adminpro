@@ -8,22 +8,35 @@ import {UserModel, UserSignInModel, UserSignUpModel} from "../models/user.model"
 import {Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 import {DataPaginator} from "../models/paginator";
+import {MenuItem} from "./sidebar.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private userAuthenticated: Subject<UserModel> = new Subject<UserModel>()
+  private userAuthenticated: Subject<UserModel> = new Subject<UserModel>();
+  private _menu: MenuItem[];
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private toastr: ToastrService) {
+
+    const menuStored = localStorage.getItem('APP-MENU');
+    if (menuStored) {
+      this._menu = JSON.parse(menuStored);
+    } else {
+      this._menu = [];
+    }
   }
 
   get userInformation() {
     return this.userAuthenticated;
+  }
+
+  get menu(): MenuItem[] {
+    return this._menu;
   }
 
   public isUserAuthenticated(): boolean {
@@ -75,15 +88,18 @@ export class UserService {
 
   private handlerLoginSuccess(userAuthenticated) {
     localStorage.setItem('APP-USER', JSON.stringify(userAuthenticated.user));
-    localStorage.setItem('APP-USER-ID', userAuthenticated.user._id);
     localStorage.setItem('APP-TOKEN', userAuthenticated.accessToken);
+    localStorage.setItem('APP-MENU', JSON.stringify(userAuthenticated.menu));
+    this._menu = userAuthenticated.menu;
     this.userAuthenticated.next(userAuthenticated.user);
   }
 
   private handlerLogoutSuccess() {
-    localStorage.removeItem('APP-USER-ID');
+    //localStorage.removeItem('APP-USER-ID');
+    this._menu = [];
     localStorage.removeItem('APP-USER');
     localStorage.removeItem('APP-TOKEN');
+    localStorage.removeItem('APP-MENU');
   }
 
   private handleUpdateProfile(userUpdated) {
