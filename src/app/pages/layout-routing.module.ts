@@ -15,6 +15,7 @@ import {HospitalsComponent} from "./admin/hospitals/hospitals.component";
 import {DoctorsComponent} from "./admin/doctors/doctors.component";
 import {DoctorFormComponent} from "./admin/doctors/doctor-form.component";
 import {SearchComponent} from "./search/search.component"
+import {AdminGuard} from "../services/guards/admin.guard";
 
 const routes: Routes = [
   {
@@ -29,7 +30,7 @@ const routes: Routes = [
       {path: 'promises', component: PromisesComponent, data: {title: 'Promises'}, canActivate: [AuthGuard]},
       {path: 'rxjs', component: RxjsComponent, data: {title: 'RxJs'}, canActivate: [AuthGuard]},
       {path: 'profile', component: ProfileComponent, data: {title: 'Profile'}, canActivate: [AuthGuard]},
-      {path: 'users', component: UsersComponent, data: {title: 'Users'}, canActivate: [AuthGuard]},
+      {path: 'users', component: UsersComponent, data: {title: 'Users'}, canActivate: [AdminGuard]},
       {path: 'hospitals', component: HospitalsComponent, data: {title: 'Hospitals'}, canActivate: [AuthGuard]},
       {path: 'doctors', component: DoctorsComponent, data: {title: 'Doctors'}, canActivate: [AuthGuard]},
       {path: 'doctor', component: DoctorFormComponent, data: {title: 'New Doctor'}, canActivate: [AuthGuard]},

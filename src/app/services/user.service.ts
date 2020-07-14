@@ -16,7 +16,9 @@ import {MenuItem} from "./sidebar.service";
 export class UserService {
 
   private userAuthenticated: Subject<UserModel> = new Subject<UserModel>();
+
   private _menu: MenuItem[];
+  private _user: UserModel;
 
   constructor(
     private http: HttpClient,
@@ -24,11 +26,13 @@ export class UserService {
     private toastr: ToastrService) {
 
     const menuStored = localStorage.getItem('APP-MENU');
-    if (menuStored) {
-      this._menu = JSON.parse(menuStored);
-    } else {
-      this._menu = [];
-    }
+    const userStored = localStorage.getItem('APP-USER');
+
+    this._menu = [];
+    if (menuStored) this._menu = JSON.parse(menuStored);
+
+    this._user = null;
+    if (userStored) this._user = JSON.parse(userStored);
   }
 
   get userInformation() {
@@ -38,6 +42,11 @@ export class UserService {
   get menu(): MenuItem[] {
     return this._menu;
   }
+
+  get user(): UserModel {
+    return this._user;
+  }
+
 
   public isUserAuthenticated(): boolean {
     return !!localStorage.getItem('APP-TOKEN');
@@ -91,12 +100,14 @@ export class UserService {
     localStorage.setItem('APP-TOKEN', userAuthenticated.accessToken);
     localStorage.setItem('APP-MENU', JSON.stringify(userAuthenticated.menu));
     this._menu = userAuthenticated.menu;
+    this._user = userAuthenticated.user;
     this.userAuthenticated.next(userAuthenticated.user);
   }
 
   private handlerLogoutSuccess() {
     //localStorage.removeItem('APP-USER-ID');
     this._menu = [];
+    this._user = null;
     localStorage.removeItem('APP-USER');
     localStorage.removeItem('APP-TOKEN');
     localStorage.removeItem('APP-MENU');
@@ -104,6 +115,7 @@ export class UserService {
 
   private handleUpdateProfile(userUpdated) {
     localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
+    this._user = userUpdated;
     this.userAuthenticated.next(userUpdated);
   }
 
@@ -122,6 +134,7 @@ export class UserService {
 
   public notifyUserUpdated(userUpdated: UserModel) {
     localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
+    this._user = userUpdated;
     this.userAuthenticated.next(userUpdated);
   }
 
