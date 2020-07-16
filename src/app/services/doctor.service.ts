@@ -14,15 +14,18 @@ export class DoctorService {
   }
 
   public find(page: number = 1, limit: number = 100): Observable<DataPaginator> {
-    return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/doctor?page=${page}&limit=${limit}`);
+    const httpOptions = this.getHttpHeaders();
+    return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/doctor?page=${page}&limit=${limit}`, httpOptions);
   }
 
   public findById(id: string): Observable<DoctorModel> {
-    return this.http.get<DoctorModel>(`${environment.hospitalServiceUrl}/doctor/${id}`);
+    const httpOptions = this.getHttpHeaders();
+    return this.http.get<DoctorModel>(`${environment.hospitalServiceUrl}/doctor/${id}`, httpOptions);
   }
 
   public search(text: string, page: number = 1, limit: number = 100): Observable<DataPaginator> {
-    return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/search/doctor/${text}?page=${page}&limit=${limit}`);
+    const httpOptions = this.getHttpHeaders();
+    return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/search/doctor/${text}?page=${page}&limit=${limit}`, httpOptions);
   }
 
   public delete(id: string): Observable<any> {

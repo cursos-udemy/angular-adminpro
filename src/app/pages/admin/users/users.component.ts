@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import {Subscription} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {ModalUploadService} from "../../../components/modal-upload/modal-upload.service";
+import {AuthService} from "../../../services/auth.service";
 
 @Component({
   selector: 'app-users',
@@ -27,18 +28,20 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
+    private authService: AuthService,
     private toastr: ToastrService,
     private modalUploadService: ModalUploadService) {
   }
 
   ngOnInit(): void {
     this.userAuthenticated = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
-    this.userSubscription = this.userService.userInformation.subscribe(user => this.userAuthenticated = user);
+    this.userSubscription = this.authService.userInformation.subscribe(user => this.userAuthenticated = user);
     this.getUsers(this.currentPage, this.itemsPerPage);
     this.uploadImageSubscription = this.modalUploadService.uploadNotificationEvent
       .subscribe(upload => {
         this.updateUserList();
-        this.userService.notifyUserUpdated(upload.modelUpdated);
+        //TODO: VERIICAR CUANDO OCURRE
+        this.authService.notifyUserUpdated(upload.modelUpdated);
       });
   }
 

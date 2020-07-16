@@ -3,14 +3,14 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 import Swal from 'sweetalert2'
 
-import {UserSignUpModel} from "../models/user.model";
-import {UserService} from "../services/user.service";
+import {UserSignUpModel} from "../../models/user.model";
+import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
 

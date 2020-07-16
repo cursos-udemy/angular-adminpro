@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UserService} from "../../services/user.service";
 import {UserModel} from "../../models/user.model";
 import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-navbar',
@@ -15,13 +15,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private userSubscription: Subscription;
 
   constructor(
-    private userService: UserService,
+    private authService: AuthService,
     private router: Router) {
   }
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
-    this.userSubscription = this.userService.userInformation.subscribe(user => this.user = user);
+    this.userSubscription = this.authService.userInformation.subscribe(user => this.user = user);
   }
 
   ngOnDestroy() {
@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   public logout(): void {
-    this.userService.logout();
+    this.authService.logout();
   }
 
   public search(value: string) {

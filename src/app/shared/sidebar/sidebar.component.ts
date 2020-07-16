@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SidebarService} from "../../services/sidebar.service";
-import {UserService} from "../../services/user.service";
 import {UserModel} from "../../models/user.model";
-import {Subscription} from "rxjs";
+import {AuthService} from "../../services/auth.service";
+
+declare function initPlugins();
 
 @Component({
   selector: 'app-sidebar',
@@ -16,13 +17,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     public sidebarService: SidebarService,
-    private userService: UserService,
+    private authService: AuthService,
   ) {
   }
 
   ngOnInit(): void {
+    initPlugins();
+
     this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
-    this.userService.userInformation.subscribe(user => {
+    this.authService.userInformation.subscribe(user => {
       this.user = user;
       this.sidebarService.loadMenu();
     });
@@ -33,7 +36,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   public logout(): void {
-    this.userService.logout();
+    this.authService.logout();
   }
 }
 
