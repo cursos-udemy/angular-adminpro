@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, NgZone} from '@angular/core';
 import {UserModel, UserSignInModel, UserSignUpModel} from "../models/user.model";
 import {Observable, Subject} from "rxjs";
 import {environment} from "../../environments/environment";
@@ -9,7 +9,7 @@ import {ToastrService} from "ngx-toastr";
 import {MenuItem} from "./sidebar.service";
 
 const KEY_ITEM_USER: string = 'APP-USER';
-const KEY_TIEM_TOKEN: string = 'APP-TOKEN';
+const KEY_ITEM_TOKEN: string = 'APP-TOKEN';
 
 declare const gapi: any;
 
@@ -28,11 +28,14 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private ngZone: NgZone,
     private toastr: ToastrService) {
+
+    //TODO: cualquier error en este punto deberia redirigir a la pantalla de login
     this.googleInit();
+
     const menuStored = localStorage.getItem('APP-MENU');
     const userStored = localStorage.getItem('APP-USER');
-
     this._menu = [];
     if (menuStored) this._menu = JSON.parse(menuStored);
 
@@ -46,8 +49,8 @@ export class AuthService {
 
   public get user(): UserModel {
     if (this._user != null) return this._user;
-    if (sessionStorage.getItem(KEY_ITEM_USER) != null) {
-      this._user = JSON.parse(sessionStorage.getItem(KEY_ITEM_USER)) as UserModel
+    if (localStorage.getItem(KEY_ITEM_USER) != null) {
+      this._user = JSON.parse(localStorage.getItem(KEY_ITEM_USER)) as UserModel
       return this._user
     }
     return {_id: null, name: null, role: null, email: null, googleAccount: false};
@@ -55,8 +58,9 @@ export class AuthService {
 
   public get token(): string {
     if (this._token != null) return this._token;
-    if (sessionStorage.getItem(KEY_TIEM_TOKEN) != null) {
-      this._token = sessionStorage.getItem(KEY_TIEM_TOKEN);
+    const tokenStored = localStorage.getItem(KEY_ITEM_TOKEN);
+    if (tokenStored != null) {
+      this._token = tokenStored
       return this._token;
     }
     return null;
@@ -79,19 +83,17 @@ export class AuthService {
     })
   }
 
-
   public isAuthenticated(): boolean {
     if (!this.token) return false;
     return !this.isTokenExpired();
   }
 
-  private isTokenExpired(): boolean {
+  public isTokenExpired(): boolean {
     const {exp} = this.getPayload(this.token);
     if (!exp) return false;
     const time = (new Date()).getTime() / 1000;
     return exp < time;
   }
-
 
   public signIn(user: UserSignInModel): Observable<any> {
     const endpoint = `${environment.hospitalServiceUrl}/auth/login`;
@@ -111,20 +113,18 @@ export class AuthService {
   }
 
   public logout() {
-    this.handlerLogoutSuccess();
     //const endpoint = `${environment.hospitalServiceUrl}/auth/logout`;
     //this.http.post(endpoint, {});
     this.toastr.info(`Good Bye!`, 'Logout success', {
       closeButton: true, progressAnimation: "decreasing", progressBar: true, timeOut: 3000
     });
-
-    // if (this.user.googleAccount) {
-    //   this.auth2.signOut()
-    //     .then(() => this.ngZone.run(() => console.log('logout google OK')))
-    //     .catch(err => console.warn('logout google ERROR', err));
-    // }
-
     this.router.navigateByUrl('/login');
+    if (this._user.googleAccount) {
+      this.auth2.signOut()
+        .then(() => console.log('logout google OK'))
+        .catch(err => console.warn('logout google ERROR', err));
+    }
+    this.handlerLogoutSuccess();
   }
 
   public notifyUserUpdated(userUpdated: UserModel) {
@@ -143,9 +143,9 @@ export class AuthService {
   }
 
   private handlerLogoutSuccess() {
-    //localStorage.removeItem('APP-USER-ID');
     this._menu = [];
     this._user = null;
+    this._token = null;
     localStorage.removeItem('APP-USER');
     localStorage.removeItem('APP-TOKEN');
     localStorage.removeItem('APP-MENU');

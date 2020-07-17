@@ -1,12 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {NgForm} from "@angular/forms";
-import {UserSignInModel} from "../../models/user.model";
+import {UserModel, UserSignInModel} from "../../models/user.model";
 import {UserService} from "../../services/user.service";
 import {ToastrService} from "ngx-toastr";
 import {AuthService} from "../../services/auth.service";
 
 declare const gapi: any;
+const HOME_PAGE = "/dashboard";
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,7 @@ export class LoginComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private router: Router,
+    private ngZone: NgZone,
     private toastr: ToastrService) {
   }
 
@@ -57,11 +59,15 @@ export class LoginComponent implements OnInit {
     let element = document.getElementById('my-signin2');
     this.auth2.attachClickHandler(element, {}, (googleUser) => {
       const token = googleUser.getAuthResponse().id_token;
+      let u: UserModel = null;
       this.authService.signInGoogle(token).subscribe(
-        loginSuccess => this.handlerLoginSuccess(loginSuccess),
+        loginSuccess => {
+          this.handlerLoginSuccess(loginSuccess);
+          this.ngZone.run(() => this.router.navigateByUrl(HOME_PAGE));
+        },
         err => {
           console.warn(err);
-          this.toastr.error(err, 'Login failed!', {
+          this.toastr.error(err, 'Login with google failed!', {
             disableTimeOut: true, closeButton: true
           });
         });
@@ -77,7 +83,10 @@ export class LoginComponent implements OnInit {
       localStorage.removeItem('APP-REMEMBER-ME');
     }
     this.authService.signIn(userSignIn).subscribe(
-      loginSuccess => this.handlerLoginSuccess(loginSuccess),
+      loginSuccess => {
+        this.handlerLoginSuccess(loginSuccess);
+        this.router.navigateByUrl(HOME_PAGE);
+      },
       err => {
         this.toastr.error('Invalid credentials', 'Login failed!', {
           disableTimeOut: true, closeButton: true
@@ -89,6 +98,5 @@ export class LoginComponent implements OnInit {
     this.toastr.success(`Welcome ${userAuthenticated.user.name}`, 'Login success!', {
       closeButton: true, progressAnimation: "decreasing", progressBar: true, timeOut: 5000
     });
-    this.router.navigateByUrl("/dashboard");
   }
 }

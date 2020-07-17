@@ -6,19 +6,26 @@ import {tap} from "rxjs/operators";
 import {environment} from "../../environments/environment";
 import {UserModel, UserSignUpModel} from "../models/user.model";
 import {DataPaginator} from "../models/paginator";
+import {AuthService} from "./auth.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private userAuthenticated: Subject<UserModel> = new Subject<UserModel>();
-
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService) {
   }
 
-  public isUserAuthenticated(): boolean {
-    return !!localStorage.getItem('APP-TOKEN');
+  public find(page: number = 1, limit: number = 100): Observable<DataPaginator> {
+    const httpOptions = this.getHttpHeaders();
+    return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/user?page=${page}&limit=${limit}`, httpOptions);
+  }
+
+  public search(text: string, page: number = 1, limit: number = 100): Observable<DataPaginator> {
+    const httpOptions = this.getHttpHeaders();
+    return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/search/user/${text}?page=${page}&limit=${limit}`, httpOptions);
   }
 
   public signUp(user: UserSignUpModel): Observable<UserModel> {
@@ -39,27 +46,17 @@ export class UserService {
 
   public updateImage(userUpdated) {
     localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
-    this.userAuthenticated.next(userUpdated);
-  }
-
-  private handleUpdateProfile(userUpdated) {
-    localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
-    this.userAuthenticated.next(userUpdated);
-  }
-
-  public find(page: number = 1, limit: number = 100): Observable<DataPaginator> {
-    const httpOptions = this.getHttpHeaders();
-    return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/user?page=${page}&limit=${limit}`, httpOptions);
-  }
-
-  public search(text: string, page: number = 1, limit: number = 100): Observable<DataPaginator> {
-    const httpOptions = this.getHttpHeaders();
-    return this.http.get<DataPaginator>(`${environment.hospitalServiceUrl}/search/user/${text}?page=${page}&limit=${limit}`, httpOptions);
+    this.authService.userInformation.next(userUpdated);
   }
 
   public delete(id: string): Observable<any> {
     const httpOptions = this.getHttpHeaders();
     return this.http.delete(`${environment.hospitalServiceUrl}/user/${id}`, httpOptions);
+  }
+
+  private handleUpdateProfile(userUpdated) {
+    localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
+    this.authService.userInformation.next(userUpdated);
   }
 
   private getHttpHeaders() {
