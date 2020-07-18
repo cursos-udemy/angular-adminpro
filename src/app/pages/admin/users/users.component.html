@@ -12,44 +12,43 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h3 class="card-title">Registered users ( <small>{{totalItems}}</small>)</h3>
+        <h3 class="card-title">Registered users: <span class="badge badge-secondary">{{totalItems}}</span></h3>
         <table class="table table-bordered table-hover">
           <thead>
           <tr>
-            <th>Image</th>
-            <th>Email</th>
-            <th>Name</th>
-            <th>Role</th>
-            <th>Auth</th>
-            <th>Actions</th>
+            <th class="val-middle">Image</th>
+            <th class="val-middle">Email</th>
+            <th class="val-middle">Name</th>
+            <th class="w190 val-middle">Role</th>
+            <th class="w100 val-middle">Auth</th>
+            <th class="val-middle" style="width: 113px;">Actions</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let user of users | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
-            <td class="w70" data-toggle="modal" data-target="#exampleModal">
+            <td class="w70 val-middle" data-toggle="modal" data-target="#exampleModal">
               <img (click)="openUploadImageModal(user)" [src]="user.image | image" class="img-50 img-circle pointer">
             </td>
-            <td>{{user.email}}</td>
-            <td>{{user.name}}</td>
-            <td>
-              <select [(ngModel)]="user.role" name="role" class="form-control" [disabled]="isThisUser(user)" >
+            <td class="val-middle">{{user.email}}</td>
+            <td class="val-middle">{{user.name}}</td>
+            <td class="val-middle">
+              <select (change)="onChangeRole($event, user)" [(ngModel)]="user.role" name="role" class="form-control" [disabled]="isThisUser(user)" >
                 <option value="ROLE_USER">ROLE_USER</option>
                 <option value="ROLE_ADMIN">ROLE_ADMIN</option>
               </select>
             </td>
-            <td>
+            <td class="val-middle">
               <label *ngIf="user.googleAccount" class="label label-danger">Google</label>
               <label *ngIf="!user.googleAccount" class="label label-info">Application</label>
             </td>
-            <td>
-              <button *ngIf="!isThisUser(user)" (click)="handleUpdateRole(user)" class="btn btn-primary"><i class="fa fa-save"></i></button>
+            <td class="val-middle">
               <button *ngIf="!isThisUser(user)" (click)="handleDeleteUser(user)" class="btn btn-danger ml-2"><i class="fa fa-trash-o"></i></button>
             </td>
           </tr>
           </tbody>
           <tfoot>
           <tr>
-            <td colspan="12">
+            <td colspan="12 val-middle">
               <div class="text-right">
                 <pagination-controls (pageChange)="onPageChange($event)"></pagination-controls>
               </div>

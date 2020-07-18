@@ -4,6 +4,8 @@ import {Subscription} from "rxjs";
 import {Router} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 
+declare function initPlugins();
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -20,6 +22,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    initPlugins();
+
     this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
     this.userSubscription = this.authService.userInformation.subscribe(user => this.user = user);
   }

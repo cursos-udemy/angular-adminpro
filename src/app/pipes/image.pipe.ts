@@ -12,13 +12,12 @@ const MODEL_TYPES = [MODEL_HOSPITAL, MODEL_USER, MODEL_DOCTOR];
 export class ImagePipe implements PipeTransform {
 
   transform(value: string, modelType: string = MODEL_USER): string {
-    if (!value) return 'assets/images/users/image-default.svg';
+    modelType = modelType.toLowerCase();
+    if (!MODEL_TYPES.includes(modelType)) modelType = MODEL_USER;
+
+    if (!value) return modelType=='user'?'assets/images/users/image-default.svg':'assets/images/no-image.jpg';
     if (value.includes('https://')) return value;
 
-    modelType = modelType.toLowerCase();
-    if (!MODEL_TYPES.includes(modelType)) {
-      modelType = MODEL_USER;
-    }
     return `${environment.hospitalServiceUrl}/image/${modelType}/${value}`;
   }
 }

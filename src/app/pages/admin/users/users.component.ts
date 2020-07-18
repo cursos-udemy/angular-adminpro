@@ -15,7 +15,7 @@ import {AuthService} from "../../../services/auth.service";
 })
 export class UsersComponent implements OnInit, OnDestroy {
 
-  private userSubscription: Subscription;
+  //private userSubscription: Subscription;
   private uploadImageSubscription: Subscription;
 
   public userAuthenticated: UserModel;
@@ -35,7 +35,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userAuthenticated = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
-    this.userSubscription = this.authService.userInformation.subscribe(user => this.userAuthenticated = user);
+    this.authService.userInformation.subscribe(user => this.userAuthenticated = user);
     this.getUsers(this.currentPage, this.itemsPerPage);
     this.uploadImageSubscription = this.modalUploadService.uploadNotificationEvent
       .subscribe(upload => {
@@ -46,7 +46,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.userSubscription.unsubscribe();
+    //this.userSubscription.unsubscribe();
     this.uploadImageSubscription.unsubscribe();
   }
 
@@ -129,46 +129,25 @@ export class UsersComponent implements OnInit, OnDestroy {
     });
   }
 
-  public handleUpdateRole(user: UserModel) {
-
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-      },
-      buttonsStyling: false
-    })
-
-    swalWithBootstrapButtons.fire({
-      title: `¿Are you sure to change to rol ${user.role}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, Updated!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.value) {
-        this.userService.updateRole(user._id, user.role).subscribe(
-          userUpdated => {
-            this.toastr.success(`User role has been successfully updated.`, 'Congratulations', {
-              closeButton: true, timeOut: 3000
-            });
-            this.users = this.users.map( u => {
-              if (u._id === userUpdated._id) u.role = userUpdated.role;
-              return u;
-            });
-          },
-          err => this.toastr.error(err.error.message, 'Update user role failed!', {closeButton: true, timeOut: 3000})
-        );
-      }
-    });
-  }
-
   public isThisUser(user: UserModel): boolean {
     return user._id === this.userAuthenticated._id;
   }
 
   public openUploadImageModal(user: UserModel): void {
     this.modalUploadService.openModal('user', user._id, user.name, user.image);
+  }
+
+  public onChangeRole(event: any, user: UserModel) {
+    this.userService.updateRole(user._id, user.role).subscribe(
+      userUpdated => {
+        this.toastr.success(`${user.name} now has the role ${user.role}.`, 'Congratulations', {
+          closeButton: true, timeOut: 3000
+        });
+      },
+      err => {
+        this.toastr.error(err.error.message, 'Update user role failed!', {closeButton: true, timeOut: 3000});
+        this.getUsers(this.currentPage, this.itemsPerPage);
+      }
+    );
   }
 }

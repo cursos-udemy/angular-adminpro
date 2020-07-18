@@ -134,15 +134,15 @@
         <li class="nav-item dropdown" *ngIf="user">
           <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
-            <img [src]="user.image | image: 'user' " alt="user" class="profile-pic" style="background: white;"/></a>
+            <img [src]="user.image | image: 'user' " [alt]="user.name" class="profile-pic" style="background: white;"/></a>
           <div class="dropdown-menu dropdown-menu-right animated fadeIn">
             <ul class="dropdown-user">
               <li>
                 <div class="dw-user-box">
-                  <div class="u-img"><img [src]="user.image | image: 'user'" alt="user"></div>
+                  <div class="u-img"><img [src]="user.image | image: 'user'" [alt]="user.name"></div>
                   <div class="u-text">
                     <h4>{{user.name}}</h4>
-                    <p class="text-muted">{{user.email}}</p>
+                    <p class="text-muted">{{user.email | spliceText:17}}</p>
                     <a routerLink="/profile" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
                   </div>
                 </div>

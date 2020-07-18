@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 import {UserSignUpModel} from "../../models/user.model";
 import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-register',
@@ -15,11 +16,12 @@ import {Router} from "@angular/router";
 export class RegisterComponent implements OnInit {
 
   public signupForm: FormGroup;
+  public errorMessage: string;
 
   constructor(
     private userService: UserService,
-    private router: Router
-  ) {
+    private router: Router,
+    private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -56,6 +58,7 @@ export class RegisterComponent implements OnInit {
   }
 
   public handleSubmit(): void {
+    this.errorMessage = null;
     if (this.signupForm.invalid) return;
     const userSignUp = this.signupForm.getRawValue() as UserSignUpModel;
 
@@ -70,7 +73,10 @@ export class RegisterComponent implements OnInit {
           this.router.navigateByUrl("/login");
         },
         err => {
-          console.log(err)
+          this.errorMessage = err.error.message;
+          this.toastr.error(err.error.message, 'Signup failed!', {
+            closeButton: true, timeOut: 5000
+          });
         });
   }
 }

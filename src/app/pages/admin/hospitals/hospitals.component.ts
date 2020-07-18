@@ -32,7 +32,8 @@ export class HospitalsComponent implements OnInit, OnDestroy {
     private modalUploadService: ModalUploadService) {
   }
 
-  ngOnInit(): void {//this.userAuthenticated = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
+  ngOnInit(): void {
+    //this.userAuthenticated = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
     this.getHospitals(this.currentPage, this.itemsPerPage);
     this.uploadImageSubscription = this.modalUploadService.uploadNotificationEvent
       .subscribe(upload => this.updateHospitalList());

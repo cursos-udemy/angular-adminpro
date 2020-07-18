@@ -1,16 +1,37 @@
 .pointer{
   cursor: pointer;
 }
-.w150 {
-  width: 180px;
+
+.w50 {
+  width: 50px;
 }
 
 .w70 {
   width: 70px;
 }
 
+.w100 {
+  width: 100px;
+}
+
 .w120 {
   width: 120px;
+}
+
+.w150 {
+  width: 150px;
+}
+
+.w180 {
+  width: 180px;
+}
+
+.w190 {
+  width: 190px;
+}
+
+.val-middle {
+  vertical-align: middle !important;
 }
 
 .img-50 {
