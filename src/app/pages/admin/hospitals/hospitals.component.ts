@@ -123,11 +123,37 @@ export class HospitalsComponent implements OnInit, OnDestroy {
       }
     });
   }
+  public addHospitalModal() {
+    Swal.fire({
+      title: 'New Hospital',
+      input: 'text',
+      inputPlaceholder: 'Enter the hospital name',
+      cancelButtonText: 'Cancel',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        if (!value) return 'Hospital name is required!';
+        if (value.trim().length === 0) return 'Hospital name is required11!!'
+      }
+    }).then(input => {
+      if (input.isConfirmed) {
+        const hospitalName: string = input.value as string;
+        this.hospitalService.save(hospitalName).subscribe(
+          newHospital => {
+            this.toastr.success(`Hospital ${newHospital.name} has been successfully created.`, 'Congratulations', {
+              closeButton: true, timeOut: 3000
+            });
+            this.updateHospitalList();
+          },
+          err => this.toastr.error(err.error.message, 'Create hospital failed!', {closeButton: true, timeOut: 3000})
+        );
+      }
+    }).catch(err => console.log(err));
+  }
 
   public handleUpdateHospital(hospital: HospitalModel) {
     this.hospitalService.update(hospital._id, hospital.name).subscribe(
       hospitalUpdated => {
-        this.toastr.success(`Hospital has been successfully updated.`, 'Congratulations', {
+        this.toastr.success(`Hospital ${hospitalUpdated.name} has been successfully updated.`, 'Congratulations', {
           closeButton: true, timeOut: 3000
         });
         this.hospitals = this.hospitals.map( h => {
@@ -146,32 +172,5 @@ export class HospitalsComponent implements OnInit, OnDestroy {
 
   public openUploadImageModal(hospital: HospitalModel): void {
     this.modalUploadService.openModal('hospital', hospital._id, hospital.name, hospital.image);
-  }
-
-  public addHospitalModal() {
-    Swal.fire({
-      title: 'New Hospital',
-      input: 'text',
-      inputPlaceholder: 'Enter the hospital name',
-      cancelButtonText: 'Cancel',
-      showCancelButton: true,
-      inputValidator: (value) => {
-        if (!value) return 'Hospital name is required!';
-        if (value.trim().length === 0) return 'Hospital name is required11!!'
-      }
-    }).then(input => {
-      if (input.isConfirmed) {
-        const hospitalName: string = input.value as string;
-        this.hospitalService.save(hospitalName).subscribe(
-          newHospital => {
-            this.toastr.success(`Hospital has been successfully created.`, 'Congratulations', {
-              closeButton: true, timeOut: 3000
-            });
-            this.updateHospitalList();
-          },
-          err => this.toastr.error(err.error.message, 'Create hospital failed!', {closeButton: true, timeOut: 3000})
-        );
-      }
-    }).catch(err => console.log(err));
   }
 }

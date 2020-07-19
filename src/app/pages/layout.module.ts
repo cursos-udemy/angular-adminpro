@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ChartsModule} from 'ng2-charts';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {NgxLoadingModule} from "ngx-loading";
@@ -45,16 +45,17 @@ import { SearchComponent } from './search/search.component';
     DoctorFormComponent,
     SearchComponent
   ],
-  imports: [
-    CommonModule,
-    LayoutRoutingModule,
-    SharedModule,
-    FormsModule,
-    ChartsModule,
-    PipesModule,
-    NgxPaginationModule,
-    NgxLoadingModule.forRoot({}),
-  ],
+    imports: [
+        CommonModule,
+        LayoutRoutingModule,
+        SharedModule,
+        FormsModule,
+        ChartsModule,
+        PipesModule,
+        NgxPaginationModule,
+        NgxLoadingModule.forRoot({}),
+        ReactiveFormsModule,
+    ],
   exports: [
     LayoutRoutingModule
   ]

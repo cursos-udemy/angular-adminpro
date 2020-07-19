@@ -3,19 +3,19 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Doctor Information</h4>
-          <form ngNativeValidate #form="ngForm" (ngSubmit)="handleSumbit(form)" class="form-material m-t-40">
+        <form [formGroup]="form" (ngSubmit)="handleSumbit()" class="form-material m-t-40">
           <div class="form-group">
             <label>Full Name</label>
-            <input [(ngModel)]="doctor.name" name="name" type="text" class="form-control form-control-line" required="">
+            <input formControlName="name" type="text" class="form-control form-control-line">
           </div>
           <div class="form-group">
             <label>Hospital</label>
-            <select (change)="onChangeHospital($event)" [(ngModel)]="doctor.hospital" name="hospital" class="form-control" required>
+            <select formControlName="hospital" class="form-control">
               <option value="">Select an hospital</option>
               <option *ngFor="let hospital of hospitals" [value]="hospital._id">{{hospital.name}}</option>
             </select>
           </div>
-          <button *ngIf="isUserAdmin()" type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Confirm</button>
+          <button *ngIf="isUserAdmin()" [disabled]="form.invalid" type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Confirm</button>
           <a routerLink="/doctors" class="btn btn-danger  ml-2"><i class="fa fa-backward"></i> Cancel</a>
         </form>
       </div>
@@ -27,16 +27,16 @@
       <div class="card-body">
         <h4 class="card-title">Hospital Information</h4>
         <div class="form-group">
-          <label *ngIf="hospital._id" >{{hospital.name}}</label>
+          <label *ngIf="hospitalModel._id">{{hospitalModel.name}}</label>
         </div>
         <div class="form-group" align="center">
-          <img *ngIf="hospital._id" [src]="hospital.image | image: 'hospital'" [alt]="hospital.name" class="w150 img-fluid">
+          <img *ngIf="hospitalModel._id" [src]="hospitalModel.image | image: 'hospital'" [alt]="hospitalModel.name" class="w150 img-thumbnail">
         </div>
       </div>
     </div>
   </div>
 
-  <div class="col-md-4" *ngIf="doctor._id">
+  <div class="col-md-4" *ngIf="doctor">
     <div class="card">
       <div class="card-body">
         <h4 class="card-title">Image</h4>
@@ -52,5 +52,4 @@
       </div>
     </div>
   </div>
-
 </div>

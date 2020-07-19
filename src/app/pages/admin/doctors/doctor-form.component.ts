@@ -1,14 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NgForm} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {ActivatedRoute, Router} from "@angular/router";
 
-import {HospitalModel} from "../../../models/hospital.model";
+import {Subscription} from "rxjs";
+import {delay} from "rxjs/operators";
+
 import {DoctorService} from "../../../services/doctor.service";
 import {HospitalService} from "../../../services/hospital.service";
-import {DoctorRequest} from "../../../models/doctor.model";
 import {ModalUploadService} from "../../../components/modal-upload/modal-upload.service";
-import {Subscription} from "rxjs";
+import {HospitalModel} from "../../../models/hospital.model";
+import {DoctorModel, DoctorRequest} from "../../../models/doctor.model";
 
 @Component({
   selector: 'app-doctor-form',
@@ -18,8 +20,9 @@ import {Subscription} from "rxjs";
 export class DoctorFormComponent implements OnInit, OnDestroy {
 
   public hospitals: HospitalModel[];
-  public doctor: DoctorRequest;
-  public hospital: HospitalModel;
+  public doctor: DoctorModel;
+  public hospitalModel: HospitalModel;
+  public form: FormGroup;
 
   private uploadImageSubscription: Subscription;
 
@@ -29,19 +32,43 @@ export class DoctorFormComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private router: Router,
     private route: ActivatedRoute,
+    private fb: FormBuilder,
     private modalUploadService: ModalUploadService) {
-    this.doctor = {name: null, hospital: ''};
-    this.hospital = {_id: null, name: null};
+
+    this.doctor = null;
+    this.hospitalModel = {_id: null, name: null};
+
+    this.form = this.fb.group({
+      name: ['', Validators.required],
+      hospital: ['', Validators.required],
+    });
+  }
+
+  get name() {
+    return this.form.get('name');
+  }
+
+  get hospital() {
+    return this.form.get('hospital');
   }
 
   ngOnInit() {
+    this.hospitals = [];
+    this.route.params.subscribe(params => {
+      const doctorId = params['id'];
+      if (doctorId) this.loadDoctor(doctorId);
+    });
+
     this.hospitalService.find().subscribe(
       paginator => this.hospitals = paginator.docs
     );
 
-    this.route.params.subscribe(params => {
-      const doctorId = params['id'];
-      if (doctorId) this.loadDoctor(doctorId);
+    this.hospital.valueChanges.subscribe(newValue => {
+      this.hospitalModel = {_id: null, name: null};
+      if (newValue) {
+        const hospital = this.hospitals.find(h => h._id === newValue);
+        if (hospital) this.hospitalModel = hospital;
+      }
     });
 
     this.uploadImageSubscription = this.modalUploadService.uploadNotificationEvent
@@ -53,31 +80,33 @@ export class DoctorFormComponent implements OnInit, OnDestroy {
   }
 
   private loadDoctor(id: string) {
-    this.doctorService.findById(id).subscribe(
-      doctor => {
-        if (doctor) {
-          this.hospital = doctor.hospital;
-          this.doctor = {...doctor, hospital: doctor.hospital._id};
-        } else {
+    this.doctorService.findById(id)
+      .pipe(delay(0))
+      .subscribe(
+        doctor => {
+          if (doctor) {
+            this.doctor = doctor;
+            this.hospitalModel = doctor.hospital;
+            this.form.setValue({name: doctor.name, hospital: this.hospitalModel._id});
+          } else {
+            this.router.navigateByUrl('/doctors');
+            this.toastr.error('doctor not found', 'find doctor failed!', {closeButton: true, timeOut: 3000})
+          }
+        },
+        err => {
+          this.toastr.error(err.error.message, 'find doctor failed!', {closeButton: true, timeOut: 3000})
           this.router.navigateByUrl('/doctors');
-          this.toastr.error('doctor not found', 'find doctor failed!', {closeButton: true, timeOut: 3000})
         }
-      },
-      err => {
-        console.error(err)
-        this.toastr.error('doctor not found', 'find doctor failed!', {closeButton: true, timeOut: 3000})
-        this.router.navigateByUrl('/doctors');
-      }
-    )
+      )
   }
 
-  public handleSumbit(form: NgForm): void {
-    if (form.invalid) return;
-    const doctorRequest = form.value as DoctorRequest;
-    if (!this.doctor._id) {
+  public handleSumbit(): void {
+    if (this.form.invalid) return;
+    const doctorRequest = this.form.value as DoctorRequest;
+    if (!this.doctor) {
       this.createDoctor(doctorRequest);
     } else {
-      this.updateDoctor(doctorRequest);
+      this.updateDoctor(this.doctor._id, doctorRequest);
     }
   }
 
@@ -89,12 +118,15 @@ export class DoctorFormComponent implements OnInit, OnDestroy {
         });
         this.router.navigateByUrl(`/doctor/${newDoctor._id}`);
       },
-      err => this.toastr.error(err.error.message, 'Create doctor failed!', {closeButton: true, timeOut: 3000})
+      err => {
+        console.log(err);
+        this.toastr.error(err.error.message, 'Create doctor failed!', {closeButton: true, timeOut: 3000})
+      }
     );
   }
 
-  private updateDoctor(doctor: DoctorRequest) {
-    this.doctorService.update(this.doctor._id, doctor).subscribe(
+  private updateDoctor(id, doctor: DoctorRequest) {
+    this.doctorService.update(id, doctor).subscribe(
       doctorUpdated => {
         this.toastr.success(`Doctor ${doctorUpdated.name} has been successfully updated.`, 'Congratulations', {
           closeButton: true, timeOut: 3000
@@ -104,24 +136,9 @@ export class DoctorFormComponent implements OnInit, OnDestroy {
     );
   }
 
+  //TODO: consulta a authService
   public isUserAdmin(): boolean {
     return true;
-  }
-
-  public onChangeHospital(event: any) {
-    const hospitalId = event.target.value;
-    this.loadHospital(hospitalId);
-  }
-
-  private loadHospital(id: string): void {
-    if (id) {
-      this.hospitalService.findById(id).subscribe(
-        hospital => this.hospital = hospital,
-        err => this.hospital = {_id: null, name: null}
-      );
-    } else {
-      this.hospital = {_id: null, name: null};
-    }
   }
 
   public openUploadImageModal(): void {

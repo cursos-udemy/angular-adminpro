@@ -35,7 +35,7 @@ export class DoctorService {
 
   public save(doctor: DoctorRequest): Observable<DoctorModel> {
     const httpOptions = this.getHttpHeaders();
-    return this.http.post<DoctorModel>(`${environment.hospitalServiceUrl}/doctor/`, doctor, httpOptions);
+    return this.http.post<DoctorModel>(`${environment.hospitalServiceUrl}/doctor`, doctor, httpOptions);
   }
 
   public update(id: string, doctor: DoctorRequest): Observable<DoctorModel> {
