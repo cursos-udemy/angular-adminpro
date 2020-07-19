@@ -21,6 +21,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ) {
   }
 
+  //TODO: utilizar el usuario desde authService
   ngOnInit(): void {
     initPlugins();
 

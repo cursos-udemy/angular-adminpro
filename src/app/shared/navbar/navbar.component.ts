@@ -21,6 +21,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private router: Router) {
   }
 
+  //TODO: utilizar el usuario desde authService
   ngOnInit(): void {
 
     initPlugins();

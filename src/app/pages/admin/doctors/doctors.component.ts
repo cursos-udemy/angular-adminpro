@@ -5,7 +5,6 @@ import {DoctorService} from "../../../services/doctor.service";
 import {ToastrService} from "ngx-toastr";
 import {ModalUploadService} from "../../../components/modal-upload/modal-upload.service";
 import {DataPaginator} from "../../../models/paginator";
-import {HospitalModel} from "../../../models/hospital.model";
 import Swal from "sweetalert2";
 
 @Component({
@@ -31,10 +30,14 @@ export class DoctorsComponent implements OnInit, OnDestroy {
     private modalUploadService: ModalUploadService) {
   }
 
+  //TODO: utilizar form builder
   ngOnInit(): void {
     this.getDoctors(this.currentPage, this.itemsPerPage);
     this.uploadImageSubscription = this.modalUploadService.uploadNotificationEvent
-      .subscribe(upload => this.updateDoctorList());
+      .subscribe(upload => {
+        const doctorUpdated = this.doctors.find(d => d._id === upload.modelUpdated._id);
+        if (doctorUpdated) doctorUpdated.image = upload.modelUpdated.image;
+      });
   }
 
   ngOnDestroy() {
@@ -123,6 +126,7 @@ export class DoctorsComponent implements OnInit, OnDestroy {
     });
   }
 
+  //TODO: consultar a authService
   public isUserAdmin(): boolean {
     return true;
   }

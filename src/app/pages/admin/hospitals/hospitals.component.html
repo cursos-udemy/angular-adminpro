@@ -12,23 +12,29 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h3 class="card-title">Registered hospitals (<small>{{totalItems}}</small>)</h3>
-        <button type="button" (click)="addHospitalModal()" class="btn btn-primary"><i class="fa fa-plus"></i> Add Hospital</button>
+        <div class="row">
+          <div class="col-8">
+            <h3 class="card-title">Registered hospitals: <span class="badge badge-secondary">{{totalItems}}</span></h3>
+          </div>
+          <div class="col-4 text-right">
+            <button type="button" (click)="addHospitalModal()" class="btn btn-primary"><i class="fa fa-plus"></i> Add Hospital</button>
+          </div>
+        </div>
         <table class="table table-bordered table-hover">
           <thead>
           <tr>
-            <th>Image</th>
-            <th>name</th>
-            <th>Actions</th>
+            <th class="val-middle">Image</th>
+            <th class="val-middle">name</th>
+            <th class="val-middle">Actions</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let hospital of hospitals | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
-            <td class="w70">
+            <td class="w70 val-middle">
               <img (click)="openUploadImageModal(hospital)" [src]="hospital.image | image: 'hospital' " class="img-50 img-circle pointer">
             </td>
-            <td><input [(ngModel)]="hospital.name" type="text" class="form-control"></td>
-            <td class="w120">
+            <td class="val-middle"><input [(ngModel)]="hospital.name" type="text" class="form-control"></td>
+            <td class="w120 val-middle">
               <button *ngIf="isUserAdmin()" (click)="handleUpdateHospital(hospital)" class="btn btn-primary"><i class="fa fa-save"></i></button>
               <button *ngIf="isUserAdmin()" (click)="handleDeleteHospital(hospital)" class="btn btn-danger  ml-2"><i class="fa fa-trash-o"></i></button>
             </td>

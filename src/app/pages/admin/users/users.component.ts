@@ -17,12 +17,13 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   //private userSubscription: Subscription;
   private uploadImageSubscription: Subscription;
+  private lastSearch: DataPaginator;
 
   public userAuthenticated: UserModel;
   public itemsPerPage: number = 4;
   public currentPage: number = 1;
   public totalItems: number = 0;
-  public users: UserModel[] = [];
+  public users: UserModel[] = []
   public loading: boolean = false;
   public searchText: string;
 
@@ -34,13 +35,14 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    //TODO: utilizar el usuario desde authService
     this.userAuthenticated = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
     this.authService.userInformation.subscribe(user => this.userAuthenticated = user);
     this.getUsers(this.currentPage, this.itemsPerPage);
     this.uploadImageSubscription = this.modalUploadService.uploadNotificationEvent
       .subscribe(upload => {
-        this.updateUserList();
-        //TODO: VERIICAR CUANDO OCURRE
+        const userUpdated = this.users.find(u => u._id === upload.modelUpdated._id);
+        if (userUpdated) userUpdated.image = upload.modelUpdated.image;
         this.authService.notifyUserUpdated(upload.modelUpdated);
       });
   }
@@ -52,18 +54,14 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   public onPageChange(event: number) {
     this.currentPage = event;
-    this.updateUserList();
+    this.getUsers(this.currentPage, this.itemsPerPage);
   }
 
   public onKeyUpSearchText() {
-    this.updateUserList();
-  }
-
-  private updateUserList() {
     if (this.searchText && this.searchText.trim().length > 0) {
       this.searchUsers(this.searchText.trim(), 1, this.itemsPerPage);
     } else {
-      this.getUsers(this.currentPage, this.itemsPerPage);
+      this.handlePaginator(this.lastSearch);
     }
   }
 
@@ -72,7 +70,8 @@ export class UsersComponent implements OnInit, OnDestroy {
     this.userService.find(page, limit).subscribe(
       paginator => {
         this.handlePaginator(paginator);
-        this.loading = false
+        this.loading = false;
+        this.lastSearch = {...paginator, docs: [...paginator.docs]};
       },
       err => this.loading = false,
     );
@@ -138,15 +137,17 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   public onChangeRole(event: any, user: UserModel) {
-    this.userService.updateRole(user._id, user.role).subscribe(
+    const newRole = event.target.value;
+    this.userService.updateRole(user._id, newRole).subscribe(
       userUpdated => {
-        this.toastr.success(`${user.name} now has the role ${user.role}.`, 'Congratulations', {
+        user.role = userUpdated.role;
+        this.toastr.success(`${userUpdated.name} now has the role ${userUpdated.role}.`, 'Congratulations', {
           closeButton: true, timeOut: 3000
         });
       },
       err => {
         this.toastr.error(err.error.message, 'Update user role failed!', {closeButton: true, timeOut: 3000});
-        this.getUsers(this.currentPage, this.itemsPerPage);
+        event.target.value = user.role;
       }
     );
   }

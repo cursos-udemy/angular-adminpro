@@ -13,14 +13,14 @@
     <div class="card">
       <div class="card-body">
         <h3 class="card-title">Registered users: <span class="badge badge-secondary">{{totalItems}}</span></h3>
-        <table class="table table-bordered table-hover">
-          <thead>
+        <table class="table table-hover">
+          <thead class="thead-default">
           <tr>
             <th class="val-middle">Image</th>
             <th class="val-middle">Email</th>
             <th class="val-middle">Name</th>
             <th class="w190 val-middle">Role</th>
-            <th class="w100 val-middle">Auth</th>
+            <th class="w100 val-middle">Auth By</th>
             <th class="val-middle" style="width: 113px;">Actions</th>
           </tr>
           </thead>
@@ -32,7 +32,7 @@
             <td class="val-middle">{{user.email}}</td>
             <td class="val-middle">{{user.name}}</td>
             <td class="val-middle">
-              <select (change)="onChangeRole($event, user)" [(ngModel)]="user.role" name="role" class="form-control" [disabled]="isThisUser(user)" >
+              <select (change)="onChangeRole($event, user)" [ngModel]="user.role" name="role" class="form-control" [disabled]="isThisUser(user)" >
                 <option value="ROLE_USER">ROLE_USER</option>
                 <option value="ROLE_ADMIN">ROLE_ADMIN</option>
               </select>

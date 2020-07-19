@@ -12,25 +12,31 @@
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h3 class="card-title">Registered doctors (<small>{{totalItems}}</small>)</h3>
-        <button type="button" routerLink="/doctor" class="btn btn-primary"><i class="fa fa-plus"></i> Add Doctor</button>
-        <table class="table table-bordered table-hover">
+        <div class="row">
+          <div class="col-8">
+            <h3 class="card-title">Registered dotors: <span class="badge badge-secondary">{{totalItems}}</span></h3>
+          </div>
+          <div class="col-4 text-right">
+            <button type="button" routerLink="/doctor" class="btn btn-primary"><i class="fa fa-plus"></i> Add Doctor</button>
+          </div>
+        </div>
+        <table class="table table-hover">
           <thead>
           <tr>
-            <th>Image</th>
-            <th>name</th>
-            <th>hospital</th>
-            <th>Actions</th>
+            <th class="val-middle">Image</th>
+            <th class="val-middle">name</th>
+            <th class="val-middle">hospital</th>
+            <th class="val-middle">Actions</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let doctor of doctors | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }">
-            <td class="w70">
+            <td class="w70 val-middle">
               <img (click)="openUploadImageModal(doctor)" [src]="doctor.image | image: 'doctor' " class="img-50 img-circle pointer">
             </td>
-            <td>{{doctor.name}}</td>
-            <td>{{doctor.hospital.name}}</td>
-            <td class="w120">
+            <td class="val-middle">{{doctor.name}}</td>
+            <td class="val-middle">{{doctor.hospital.name}}</td>
+            <td class="w120 val-middle">
               <button *ngIf="isUserAdmin()" [routerLink]="['/doctor', doctor._id]" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
               <button *ngIf="isUserAdmin()" (click)="handleDeleteDoctor(doctor)" class="btn btn-danger  ml-2"><i class="fa fa-trash-o"></i></button>
             </td>

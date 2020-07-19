@@ -1,6 +1,6 @@
 import {Component, NgZone, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {NgForm} from "@angular/forms";
+import {FormBuilder, FormGroup, NgForm, Validators} from "@angular/forms";
 import {UserModel, UserSignInModel} from "../../models/user.model";
 import {UserService} from "../../services/user.service";
 import {ToastrService} from "ngx-toastr";
@@ -16,8 +16,7 @@ const HOME_PAGE = "/dashboard";
 })
 export class LoginComponent implements OnInit {
 
-  public email: string;
-  public rememberMe: boolean = false;
+  public loginForm: FormGroup;
   private auth2: any;
 
   constructor(
@@ -25,17 +24,27 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private ngZone: NgZone,
+    private fb: FormBuilder,
     private toastr: ToastrService) {
+
+    const emailRemembered = localStorage.getItem('APP-REMEMBER-ME');
+    this.loginForm = this.fb.group({
+      email: [emailRemembered || '', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(4)]],
+      rememberMe: [!!(emailRemembered)]
+    });
+  }
+
+  get email() {
+    return this.loginForm.get('email');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
   }
 
   ngOnInit(): void {
     this.renderGoogleButton();
-
-    const emailRemembered = localStorage.getItem('APP-REMEMBER-ME');
-    if (emailRemembered) {
-      this.rememberMe = true;
-      this.email = emailRemembered;
-    }
   }
 
   public renderGoogleButton() {
@@ -74,24 +83,24 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  public handleSubmit(form: NgForm): void {
-    if (form.invalid) return;
-    const userSignIn = form.value as UserSignInModel;
-    if (userSignIn.rememberMe) {
-      localStorage.setItem('APP-REMEMBER-ME', userSignIn.email);
-    } else {
-      localStorage.removeItem('APP-REMEMBER-ME');
-    }
+  public handleSubmit(): void {
+    if (this.loginForm.invalid) return;
+    const userSignIn = this.loginForm.value as UserSignInModel;
     this.authService.signIn(userSignIn).subscribe(
       loginSuccess => {
-        this.handlerLoginSuccess(loginSuccess);
         this.router.navigateByUrl(HOME_PAGE);
+        this.handlerLoginSuccess(loginSuccess);
       },
       err => {
         this.toastr.error('Invalid credentials', 'Login failed!', {
           disableTimeOut: true, closeButton: true
         });
       });
+    if (userSignIn.rememberMe) {
+      localStorage.setItem('APP-REMEMBER-ME', userSignIn.email);
+    } else {
+      localStorage.removeItem('APP-REMEMBER-ME');
+    }
   }
 
   private handlerLoginSuccess(userAuthenticated) {

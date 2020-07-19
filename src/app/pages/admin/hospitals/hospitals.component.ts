@@ -33,10 +33,12 @@ export class HospitalsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    //this.userAuthenticated = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
     this.getHospitals(this.currentPage, this.itemsPerPage);
     this.uploadImageSubscription = this.modalUploadService.uploadNotificationEvent
-      .subscribe(upload => this.updateHospitalList());
+      .subscribe(upload => {
+        const hospitalUpdated = this.hospitals.find(d => d._id === upload.modelUpdated._id);
+        if (hospitalUpdated) hospitalUpdated.image = upload.modelUpdated.image;
+      });
   }
 
   ngOnDestroy() {
@@ -110,7 +112,7 @@ export class HospitalsComponent implements OnInit, OnDestroy {
       if (result.value) {
         this.hospitalService.delete(hospital._id).subscribe(
           resp => {
-            this.toastr.success(`User ${hospital.name} has been successfully removed.`, 'Congratulations', {
+            this.toastr.success(`Hospital ${hospital.name} has been successfully removed.`, 'Congratulations', {
               closeButton: true, timeOut: 3000
             });
             this.hospitals = this.hospitals.filter(u => u._id != hospital._id);
@@ -137,6 +139,7 @@ export class HospitalsComponent implements OnInit, OnDestroy {
     );
   }
 
+  //TODO: consultar a auth Service
   public isUserAdmin(): boolean {
     return true;
   }
@@ -154,6 +157,7 @@ export class HospitalsComponent implements OnInit, OnDestroy {
       showCancelButton: true,
       inputValidator: (value) => {
         if (!value) return 'Hospital name is required!';
+        if (value.trim().length === 0) return 'Hospital name is required11!!'
       }
     }).then(input => {
       if (input.isConfirmed) {
