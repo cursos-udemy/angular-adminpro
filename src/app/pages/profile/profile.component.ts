@@ -1,10 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UserModel} from "../../models/user.model";
-import {UserService} from "../../services/user.service";
 import {NgForm} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
-import {FileUploadService} from "../../services/file-upload.service";
 import {HttpEventType} from "@angular/common/http";
+
+import {UserModel} from "../../models/user.model";
+import {UserService} from "../../services/user.service";
+import {FileUploadService} from "../../services/file-upload.service";
 
 @Component({
   selector: 'app-profile',
@@ -45,12 +46,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
           closeButton: true, progressAnimation: "decreasing", progressBar: true, timeOut: 3000
         });
       },
-      err => {
-        console.log(err);
-        this.toastr.error('You profile could not be updated, please try again later', 'Update Profile failed!', {
-          disableTimeOut: true, closeButton: true
-        });
-      }
+      err => this.toastr.error(err.error.message, 'Update Profile failed!', {
+        disableTimeOut: true, closeButton: true
+      })
     );
   }
 
@@ -102,15 +100,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
           err => {
             console.log(err);
             this.toastr.error(err.error.error, 'Update image failed!', {
-                closeButton: true, timeOut: 3000
-              }
-            )
+              closeButton: true, timeOut: 3000
+            });
           }
         )
     }
   }
 
-  private initialValues(){
+  private initialValues() {
     this.imageSelected = null;
     this.fileNameSelected = "Select an image";
     this.uploadProgress = 0;
