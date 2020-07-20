@@ -10,30 +10,20 @@ declare function initPlugins();
   templateUrl: './sidebar.component.html',
   styles: []
 })
-export class SidebarComponent implements OnInit, OnDestroy {
-
-  public user: UserModel;
-  //private userSubscription: Subscription;
+export class SidebarComponent implements OnInit {
 
   constructor(
     public sidebarService: SidebarService,
-    private authService: AuthService,
-  ) {
+    private authService: AuthService) {
   }
 
-  //TODO: utilizar el usuario desde authService
+  public get user(): UserModel {
+    return this.authService.userAuthenticated;
+  }
+
   ngOnInit(): void {
     initPlugins();
-
-    this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
-    this.authService.userInformation.subscribe(user => {
-      this.user = user;
-      this.sidebarService.loadMenu();
-    });
-  }
-
-  ngOnDestroy() {
-    //this.userSubscription.unsubscribe();
+    this.sidebarService.loadMenu();
   }
 
   public logout(): void {

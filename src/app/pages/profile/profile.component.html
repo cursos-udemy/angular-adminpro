@@ -38,12 +38,6 @@
         </div>
         <input (change)="selectImage($event)" type="file" class="" id="userImage" aria-describedby="userImage">
         <!--        <label class="custom-file-label" for="userImage">{{fileNameSelected}}</label>-->
-        <div *ngIf="uploadProgress > 0" class="progress">
-          <div class="progress-bar" role="progressbar" [ngStyle]="{width:uploadProgress+'%'}" style="width: 75%;height:15px;"
-               attr.aria-valuenow="{{uploadProgress}}" aria-valuemin="0" aria-valuemax="100">
-            {{uploadProgress}}%
-          </div>
-        </div>
         <br><br>
         <button (click)="uploadImage()" [disabled]="!imageSelected" type="button" class="btn btn-block btn-success waves-effect waves-light m-r-10"><i
           class="fa fa-save"></i> Update Image

@@ -6,6 +6,7 @@ import {HttpEventType} from "@angular/common/http";
 import {UserModel} from "../../models/user.model";
 import {UserService} from "../../services/user.service";
 import {FileUploadService} from "../../services/file-upload.service";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-profile',
@@ -14,21 +15,22 @@ import {FileUploadService} from "../../services/file-upload.service";
 })
 export class ProfileComponent implements OnInit, OnDestroy {
 
-  public user: UserModel;
   public imageSelected: File;
   public imagePreview: string | ArrayBuffer;
   public fileNameSelected: string;
-  public uploadProgress: number;
 
   constructor(
     private userService: UserService,
+    private authService: AuthService,
     private fileUploadService: FileUploadService,
     private toastr: ToastrService
   ) {
   }
 
+  public get user (): UserModel {
+    return this.authService.userAuthenticated;
+  }
   ngOnInit(): void {
-    this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
     this.initialValues();
   }
 
@@ -53,7 +55,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   public selectImage(event): void {
-    this.uploadProgress = 0;
     this.imageSelected = event.target.files[0];
     if (!this.imageSelected) {
       this.initialValues();
@@ -83,14 +84,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
     } else {
       this.fileUploadService.upload(this.imageSelected, this.user._id, 'user')
         .subscribe(event => {
-            if (event.type === HttpEventType.UploadProgress) {
-              this.uploadProgress = Math.round((event.loaded / event.total) * 100);
-              console.log('uploadProgress', this.uploadProgress);
-            } else if (event.type === HttpEventType.Response) {
-              //this.modalService.uploadNotifier.emit(this.customer);
+             if (event.type === HttpEventType.Response) {
               let response: any = event.body;
-              this.userService.updateImage(response.modelUpdated);
-              this.user.image = response.modelUpdated.image;
+              this.authService.notifyUserUpdated(response.modelUpdated);
               this.initialValues();
               this.toastr.success(`Your image has been successfully updated`, 'Congratulations', {
                 closeButton: true, progressAnimation: "decreasing", progressBar: true, timeOut: 3000
@@ -110,6 +106,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private initialValues() {
     this.imageSelected = null;
     this.fileNameSelected = "Select an image";
-    this.uploadProgress = 0;
   }
 }

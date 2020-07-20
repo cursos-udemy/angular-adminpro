@@ -36,7 +36,7 @@ export class UserService {
   public updateProfile(id: string, user: UserModel) {
     const httpOptions = this.getHttpHeaders();
     return this.http.put<UserModel>(`${environment.hospitalServiceUrl}/user/profile/${id}`, {...user}, httpOptions)
-      .pipe(tap(userUpdated => this.handleUpdateProfile(userUpdated)));
+      .pipe(tap(userUpdated => this.authService.notifyUserUpdated(userUpdated)));
   }
 
   public updateRole(id: string, newRole: string) {
@@ -44,19 +44,9 @@ export class UserService {
     return this.http.put<UserModel>(`${environment.hospitalServiceUrl}/user/admin/${id}`, {role: newRole}, httpOptions);
   }
 
-  public updateImage(userUpdated) {
-    localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
-    this.authService.userInformation.next(userUpdated);
-  }
-
   public delete(id: string): Observable<any> {
     const httpOptions = this.getHttpHeaders();
     return this.http.delete(`${environment.hospitalServiceUrl}/user/${id}`, httpOptions);
-  }
-
-  private handleUpdateProfile(userUpdated) {
-    localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
-    this.authService.userInformation.next(userUpdated);
   }
 
   private getHttpHeaders() {

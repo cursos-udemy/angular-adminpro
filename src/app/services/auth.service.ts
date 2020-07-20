@@ -10,6 +10,7 @@ import {MenuItem} from "./sidebar.service";
 
 const KEY_ITEM_USER: string = 'APP-USER';
 const KEY_ITEM_TOKEN: string = 'APP-TOKEN';
+const KEY_ITEM_MENU: string = 'APP-MENU';
 
 declare const gapi: any;
 
@@ -23,7 +24,6 @@ export class AuthService {
   private _menu: MenuItem[];
 
   public auth2: any;
-  private userAuthenticated: Subject<UserModel> = new Subject<UserModel>();
 
   constructor(
     private http: HttpClient,
@@ -34,20 +34,22 @@ export class AuthService {
     //TODO: cualquier error en este punto deberia redirigir a la pantalla de login
     this.googleInit();
 
-    const menuStored = localStorage.getItem('APP-MENU');
-    const userStored = localStorage.getItem('APP-USER');
-    this._menu = [];
-    if (menuStored) this._menu = JSON.parse(menuStored);
-
-    this._user = null;
-    if (userStored) this._user = JSON.parse(userStored);
+    const menuStored = localStorage.getItem(KEY_ITEM_MENU);
+    const userStored = localStorage.getItem(KEY_ITEM_USER);
+    const tokenStored = localStorage.getItem(KEY_ITEM_TOKEN);
+    try {
+      // TODO: decodifcar el token para cargar el resto de las variables
+      if (menuStored) this._menu = JSON.parse(menuStored);
+      if (userStored) this._user = JSON.parse(userStored);
+      if (tokenStored) this._token = tokenStored;
+      //console.log('User Recovery: ', this._user);
+    } catch (error) {
+      this._menu = [];
+      this._user = null;
+    }
   }
 
-  public get userInformation() {
-    return this.userAuthenticated;
-  }
-
-  public get user(): UserModel {
+  public get userAuthenticated(): UserModel {
     if (this._user != null) return this._user;
     if (localStorage.getItem(KEY_ITEM_USER) != null) {
       this._user = JSON.parse(localStorage.getItem(KEY_ITEM_USER)) as UserModel
@@ -130,7 +132,7 @@ export class AuthService {
   public notifyUserUpdated(userUpdated: UserModel) {
     localStorage.setItem('APP-USER', JSON.stringify(userUpdated));
     this._user = userUpdated;
-    this.userAuthenticated.next(userUpdated);
+    //this._userAuthenticated.next(userUpdated);
   }
 
   private handlerLoginSuccess(userAuthenticated) {
@@ -139,7 +141,7 @@ export class AuthService {
     localStorage.setItem('APP-MENU', JSON.stringify(userAuthenticated.menu));
     this._menu = userAuthenticated.menu;
     this._user = userAuthenticated.user;
-    this.userAuthenticated.next(userAuthenticated.user);
+    //this._userAuthenticated.next(userAuthenticated.user);
   }
 
   private handlerLogoutSuccess() {
@@ -161,11 +163,10 @@ export class AuthService {
 
   private hasRole(role: string): boolean {
     //return this.user.roles.includes(role);
-    return this.user.role === role;
+    return this.userAuthenticated.role === role;
   }
 
   private getPayload(token: string): any {
     return JSON.parse(atob(token.split(".")[1]));
   }
-
 }

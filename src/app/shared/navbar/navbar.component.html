@@ -131,18 +131,18 @@
         <!-- ============================================================== -->
         <!-- Profile -->
         <!-- ============================================================== -->
-        <li class="nav-item dropdown" *ngIf="user">
+        <li class="nav-item dropdown" *ngIf="userAuthenticated">
           <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
-            <img [src]="user.image | image: 'user' " [alt]="user.name" class="profile-pic" style="background: white;"/></a>
+            <img [src]="userAuthenticated.image | image: 'user' " [alt]="userAuthenticated.name" class="profile-pic" style="background: white;"/></a>
           <div class="dropdown-menu dropdown-menu-right animated fadeIn">
             <ul class="dropdown-user">
               <li>
                 <div class="dw-user-box">
-                  <div class="u-img"><img [src]="user.image | image: 'user'" [alt]="user.name"></div>
+                  <div class="u-img"><img [src]="userAuthenticated.image | image: 'user'" [alt]="userAuthenticated.name"></div>
                   <div class="u-text">
-                    <h4>{{user.name}}</h4>
-                    <p class="text-muted">{{user.email | spliceText:17}}</p>
+                    <h4>{{userAuthenticated.name}}</h4>
+                    <p class="text-muted">{{userAuthenticated.email | spliceText:17}}</p>
                     <a routerLink="/profile" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
                   </div>
                 </div>

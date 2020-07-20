@@ -11,27 +11,20 @@ declare function initPlugins();
   templateUrl: './navbar.component.html',
   styles: []
 })
-export class NavbarComponent implements OnInit, OnDestroy {
-
-  public user: UserModel;
-  private userSubscription: Subscription;
+export class NavbarComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
     private router: Router) {
   }
 
-  //TODO: utilizar el usuario desde authService
-  ngOnInit(): void {
-
-    initPlugins();
-
-    this.user = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
-    this.userSubscription = this.authService.userInformation.subscribe(user => this.user = user);
+  public get userAuthenticated(): UserModel {
+    return this.authService.userAuthenticated;
   }
 
-  ngOnDestroy() {
-    this.userSubscription.unsubscribe();
+  //TODO: utilizar el usuario desde authService
+  ngOnInit(): void {
+    initPlugins();
   }
 
   public logout(): void {

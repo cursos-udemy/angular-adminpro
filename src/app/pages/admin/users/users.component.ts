@@ -15,11 +15,9 @@ import {AuthService} from "../../../services/auth.service";
 })
 export class UsersComponent implements OnInit, OnDestroy {
 
-  //private userSubscription: Subscription;
   private uploadImageSubscription: Subscription;
   private lastSearch: DataPaginator;
 
-  public userAuthenticated: UserModel;
   public itemsPerPage: number = 4;
   public currentPage: number = 1;
   public totalItems: number = 0;
@@ -34,21 +32,21 @@ export class UsersComponent implements OnInit, OnDestroy {
     private modalUploadService: ModalUploadService) {
   }
 
+  public get userAuthenticated(): UserModel {
+    return this.authService.userAuthenticated;
+  }
+
   ngOnInit(): void {
-    //TODO: utilizar el usuario desde authService
-    this.userAuthenticated = JSON.parse(localStorage.getItem('APP-USER')) as UserModel;
-    this.authService.userInformation.subscribe(user => this.userAuthenticated = user);
     this.getUsers(this.currentPage, this.itemsPerPage);
     this.uploadImageSubscription = this.modalUploadService.uploadNotificationEvent
       .subscribe(upload => {
-        const userUpdated = this.users.find(u => u._id === upload.modelUpdated._id);
+        const userUpdated = this.users.find(user => user._id === upload.modelUpdated._id);
         if (userUpdated) userUpdated.image = upload.modelUpdated.image;
         this.authService.notifyUserUpdated(upload.modelUpdated);
       });
   }
 
   ngOnDestroy() {
-    //this.userSubscription.unsubscribe();
     this.uploadImageSubscription.unsubscribe();
   }
 
